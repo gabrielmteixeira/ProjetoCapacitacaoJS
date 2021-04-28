@@ -30,12 +30,12 @@ const User = sequelize.define('Users', {
     },
     image: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     role: {
         type: DataTypes.ENUM,
         values: ['admin', 'user', 'artist'],
-        allowNull: false,
+        allowNull: true,
     },
     musicGenre: {
         type: DataTypes.ENUM,
@@ -48,15 +48,16 @@ const User = sequelize.define('Users', {
             'Sertanejo',
             'Funk',
             'Indie',
-            'Others'],
-        allowNull: false,
+            'Others',
+        ],
+        allowNull: true,
     },
     age: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
     purchasedMusics: {
-        type: DataTypes.ARRAY,
+        type: DataTypes.STRING,
         allowNull: true,
     },
 });
@@ -66,7 +67,9 @@ const User = sequelize.define('Users', {
 // and then performs the necessary changes in the table to make it match the
 // model.
 User.sync({alter: true, force: false})
-    .then(()=>{
+    .then(() => {
         console.log('User table was (re)created');
     })
-    .catch((err)=> console.log(err));
+    .catch((err) => console.log(err));
+
+module.exports = User;
