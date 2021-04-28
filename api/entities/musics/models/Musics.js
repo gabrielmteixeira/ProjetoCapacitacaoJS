@@ -2,7 +2,7 @@ const sequelize = require('../../../database');
 const {DataTypes} = require('sequelize');
 const {nanoid} = require('nanoid');
 
-const Musics = sequelize.define('Musics', {
+const Music = sequelize.define('Musics', {
     id: {
         type: DataTypes.STRING(21),
         defaultValue: () => nanoid(),
@@ -42,7 +42,8 @@ const Musics = sequelize.define('Musics', {
             'Sertanejo',
             'Funk',
             'Indie',
-            'Others'],
+            'Others',
+        ],
         allowNull: false,
     },
     releaseDate: {
@@ -51,7 +52,7 @@ const Musics = sequelize.define('Musics', {
     },
 });
 
-const Albums = sequelize.define('Albums', {
+const Album = sequelize.define('Albums', {
     id: {
         type: DataTypes.STRING(21),
         defaultValue: () => nanoid(),
@@ -97,7 +98,8 @@ const Albums = sequelize.define('Albums', {
             'Sertanejo',
             'Funk',
             'Indie',
-            'Others'],
+            'Others',
+        ],
         allowNull: false,
     },
     releaseDate: {
@@ -110,13 +112,16 @@ const Albums = sequelize.define('Albums', {
 // alter - This checks what is the current state of the table in the  database,
 // and then performs the necessary changes in the table to make it match the
 // model.
-Musics.sync({alter: true, force: false})
-    .then(()=>{
+Music.sync({alter: true, force: false})
+    .then(() => {
         console.log('User table was (re)created');
     })
-    .catch((err)=> console.log(err));
-Albums.sync({alter: true, force: false})
-    .then(()=>{
+    .catch((err) => console.log(err));
+
+Album.sync({alter: true, force: false})
+    .then(() => {
         console.log('User table was (re)created');
     })
-    .catch((err)=> console.log(err));
+    .catch((err) => console.log(err));
+
+module.exports = {Music, Album};
