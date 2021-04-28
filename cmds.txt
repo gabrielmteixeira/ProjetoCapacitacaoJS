@@ -1,4 +1,4 @@
-yarn create react-app my-app --template typescript
+yarn create react-app wave-app --template typescript
 
 Inside that directory, you can run several commands:
 
@@ -17,7 +17,7 @@ Inside that directory, you can run several commands:
 
 We suggest that you begin by typing:
 
-  cd my-app
+  cd wave-app
   yarn start
 
 Happy hacking!
