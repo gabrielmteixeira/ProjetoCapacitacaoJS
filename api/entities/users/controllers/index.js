@@ -1,19 +1,19 @@
 const router = require('express').Router();
 const UserService = require('../services/UserService');
 
-router.post('/', (req, res) => {
+router.get('/', (req, res) => {
     try {
-        UserService.createUser(req.body.user);
-        res.sendStatus(200);
+        UserService.getUser(req.body.id);
+        res.send(200);
     } catch {
         (e) => console.log(e);
     }
 });
 
-router.get('/', (req, res) => {
+router.post('/', (req, res) => {
     try {
-        UserService.getUser(req.body.id);
-        res.send(200);
+        UserService.createUser(req.body.user);
+        res.sendStatus(200);
     } catch {
         (e) => console.log(e);
     }
