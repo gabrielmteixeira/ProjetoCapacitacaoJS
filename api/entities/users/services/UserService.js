@@ -5,13 +5,18 @@ class UserService {
         await User.create(user);
     }
 
-    async getUser(id) {
-        await User.findByPk(id);
+    async getAll() {
+        const users = await User.findAll();
+        return users;
     }
 
-    async alterUser(id, user) {
-        const userFromDB = await User.findByPk(id);
-        userFromDB.update(user);
+    async getUser(id) {
+        return await User.findByPk(id);
+    }
+
+    async alterUser(id, body) {
+        const user = User.findByPk(id);
+        await user.update(body);
     }
 
     async deleteUser(id) {

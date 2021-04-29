@@ -2,27 +2,45 @@ const {Music} = require('../models/Musics');
 
 class MusicService {
     async createMusic(music) {
-        await Music.create(music);
+        try {
+            await Music.create(music);
+        } catch (error) {
+            throw error;
+        }
     }
 
-    async getMusic(id) {
-        music = await Music.findByPk(id);
-        return music;
+    async getMusicById(id) {
+        const music = await Music.findByPk(id);
+
+        if (music !== null) {
+            return music;
+        } else {
+            console.log(`Não há usuário com o ID ${id}!`);
+        }
     }
 
     async getAllMusics() {
-        musics = Music.findAll();
+        const musics = await Music.findAll();
         return musics;
     }
 
-    async alterMusic(id, music) {
-        const musicFromDB = await Music.findByPk(id);
-        musicFromDB.update(music);
+    async updateMusicInfo(id, body) {
+        const music = await Music.findByPk(id);
+
+        if (music !== null) {
+            await music.update(body);
+        } else {
+            console.log(`Não há usuário com  ID ${id}!`);
+        }
     }
 
     async deleteMusic(id) {
         const music = await Music.findByPk(id);
-        await music.destroy();
+        if (music !== null) {
+            await music.destroy();
+        } else {
+            console.log(`Não há usuário com  ID ${id}!`);
+        }
     }
 }
 

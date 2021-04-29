@@ -21,7 +21,7 @@ const Music = sequelize.define('Musics', {
     },
     image: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     single: {
         type: DataTypes.BOOLEAN,
@@ -60,12 +60,6 @@ const Album = sequelize.define('Albums', {
         allowNull: false,
         unique: true,
     },
-    musicId: {
-        type: DataTypes.STRING(21),
-        foreignKey: true,
-        allowNull: false,
-        unique: true,
-    },
     author: {
         type: DataTypes.STRING(21),
         allowNull: false,
@@ -77,7 +71,7 @@ const Album = sequelize.define('Albums', {
     },
     image: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     single: {
         type: DataTypes.BOOLEAN,
@@ -108,17 +102,24 @@ const Album = sequelize.define('Albums', {
     },
 });
 
+Album.hasMany(Music, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+});
+
+Music.belongsTo(Album);
+
 // force - This creates the table, dropping it first if it already existed
 // alter - This checks what is the current state of the table in the  database,
 // and then performs the necessary changes in the table to make it match the
 // model.
-Music.sync({alter: true, force: false})
+Music.sync({alter: false, force: false})
     .then(() => {
         console.log('User table was (re)created');
     })
     .catch((err) => console.log(err));
 
-Album.sync({alter: true, force: false})
+Album.sync({alter: false, force: false})
     .then(() => {
         console.log('User table was (re)created');
     })

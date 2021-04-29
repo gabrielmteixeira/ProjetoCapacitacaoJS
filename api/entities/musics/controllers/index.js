@@ -1,59 +1,59 @@
 const router = require('express').Router();
 const MusicService = require('../services/MusicService');
 
-router.get('/', async (req, res) => {
-    try {
-        const musics = MusicService.getAllMusics();
-
-        res.status(200).json(musics);
-    } catch (e) {
-        console.log(e);
-    }
-});
-
 router.post('/', async (req, res) => {
     try {
-        const newMusic = req.body.music;
-        MusicService.createMusic(newMusic);
+        const newMusic = req.body;
+        newMusic.releaseDate = new Date();
+        await MusicService.createMusic(newMusic);
 
         res.status(200).json(newMusic);
-    } catch (e) {
-        console.log(e);
+    } catch (error) {
+        console.log(error);
     }
 });
 
-router.put('/', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
-        alteredMusic = req.body.music;
-        alteredMusicId = req.body.id;
-        MusicService.alterMusic(alteredMusicId, alteredMusic);
-
-        res.status(200).json({...alteredMusic, alteredMusicId});
-    } catch (e) {
-        console.log(e);
+        const musics = await MusicService.getAllMusics();
+        res.status(200).json(musics);
+    } catch (error) {
+        console.log(error);
     }
 });
 
 router.get('/:id', async (req, res) => {
     // duvida se eh realmente assim (a ideia eh ser users/userid)
     try {
-        const music = MusicService.getMusic(req.params.id);
+        const music = await MusicService.getMusicById(req.params.id);
 
         res.status(200).json(music);
-    } catch (e) {
-        console.log(e);
+    } catch (error) {
+        console.log(error);
     }
 });
 
-router.delete('/', async (req, res) => {
+router.put('/:id', async (req, res) => {
     try {
-        const musicId = req.body.id;
-        music = MusicService.getMusic(musicId);
-        MusicService.deleteMusic(musicId);
+        body = req.body;
+        musicId = req.params.id;
+        await MusicService.updateMusicInfo(musicId, body);
+
+        res.status(200).json({...body, ...{id: musicId}});
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+router.delete('/:id', async (req, res) => {
+    try {
+        const musicId = req.params.id;
+        music = await MusicService.getMusicById(musicId);
+        await MusicService.deleteMusic(musicId);
 
         res.status(200).json(music);
-    } catch {
-        (e) => console.log(e);
+    } catch (e) {
+        console.log(error);
     }
 });
 

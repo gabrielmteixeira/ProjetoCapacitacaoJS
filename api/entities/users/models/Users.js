@@ -54,7 +54,7 @@ const User = sequelize.define('Users', {
     },
     age: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
     purchasedMusics: {
         type: DataTypes.STRING,
@@ -66,7 +66,7 @@ const User = sequelize.define('Users', {
 // alter - This checks what is the current state of the table in the  database,
 // and then performs the necessary changes in the table to make it match the
 // model.
-User.sync({alter: true, force: false})
+User.sync({alter: false, force: false})
     .then(() => {
         console.log('User table was (re)created');
     })
