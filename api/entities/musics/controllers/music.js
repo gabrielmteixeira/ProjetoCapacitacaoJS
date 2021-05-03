@@ -1,29 +1,8 @@
 const router = require('express').Router();
 const MusicService = require('../services/MusicService');
 
-router.post('/', async (req, res) => {
-    try {
-        const newMusic = req.body;
-        newMusic.releaseDate = new Date();
-        await MusicService.createMusic(newMusic);
-
-        res.status(200).json(newMusic);
-    } catch (error) {
-        console.log(error);
-    }
-});
-
-router.get('/', async (req, res) => {
-    try {
-        const musics = await MusicService.getAllMusics();
-        res.status(200).json(musics);
-    } catch (error) {
-        console.log(error);
-    }
-});
-
+// Pegar música especifica pelo id
 router.get('/:id', async (req, res) => {
-    // duvida se eh realmente assim (a ideia eh ser users/userid)
     try {
         const music = await MusicService.getMusicById(req.params.id);
 
@@ -33,6 +12,17 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// Get all musics (n creio que vá ser utilizado)
+router.get('/', async (req, res) => {
+    try {
+        const musics = await MusicService.getAllMusics();
+        res.status(200).json(musics);
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+// Edit música específica
 router.put('/:id', async (req, res) => {
     try {
         body = req.body;
@@ -45,6 +35,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
+// Delete música específica
 router.delete('/:id', async (req, res) => {
     try {
         const musicId = req.params.id;
