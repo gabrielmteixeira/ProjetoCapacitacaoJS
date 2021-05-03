@@ -14,7 +14,10 @@ app.use(express.json());
 const usersRouter = require('../entities/users/controllers');
 app.use('/users', usersRouter);
 
-const musicsRouter = require('../entities/musics/controllers');
-app.use('/musics', musicsRouter);
+const albumsRouter = require('../entities/musics/controllers/album');
+app.use('/albums', albumsRouter);
+
+const musicsRouter = require('../entities/musics/controllers/music');
+app.use('/music', musicsRouter);
 
 module.exports = app;

@@ -11,7 +11,7 @@ const Music = sequelize.define('Musics', {
         unique: true,
     },
     author: {
-        type: DataTypes.STRING(21),
+        type: DataTypes.STRING,
         allowNull: false,
         unique: true,
     },
@@ -22,10 +22,6 @@ const Music = sequelize.define('Musics', {
     image: {
         type: DataTypes.STRING,
         allowNull: true,
-    },
-    single: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
     },
     duration: {
         type: DataTypes.STRING,
@@ -44,10 +40,6 @@ const Music = sequelize.define('Musics', {
             'Indie',
             'Others',
         ],
-        allowNull: false,
-    },
-    releaseDate: {
-        type: DataTypes.DATE,
         allowNull: false,
     },
 });
@@ -61,7 +53,7 @@ const Album = sequelize.define('Albums', {
         unique: true,
     },
     author: {
-        type: DataTypes.STRING(21),
+        type: DataTypes.STRING,
         allowNull: false,
         unique: true,
     },
@@ -72,10 +64,6 @@ const Album = sequelize.define('Albums', {
     image: {
         type: DataTypes.STRING,
         allowNull: true,
-    },
-    single: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
     },
     duration: {
         type: DataTypes.STRING,
@@ -102,12 +90,13 @@ const Album = sequelize.define('Albums', {
     },
 });
 
-Album.hasMany(Music, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-});
-
 Music.belongsTo(Album);
+
+Album.hasMany(Music, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+    hooks: true,
+});
 
 // force - This creates the table, dropping it first if it already existed
 // alter - This checks what is the current state of the table in the  database,
