@@ -3,7 +3,8 @@ const {Music} = require('../models/Musics');
 class MusicService {
     async createMusic(music) {
         try {
-            await Music.create(music);
+            const teste = await Music.create(music);
+            console.log(teste.id);
         } catch (error) {
             throw error;
         }
@@ -15,7 +16,7 @@ class MusicService {
         if (music !== null) {
             return music;
         } else {
-            console.log(`Não há usuário com o ID ${id}!`);
+            console.log(`Não há música com o ID ${id}!`);
         }
     }
 
@@ -30,7 +31,7 @@ class MusicService {
         if (music !== null) {
             await music.update(body);
         } else {
-            console.log(`Não há usuário com  ID ${id}!`);
+            console.log(`Não há música com  ID ${id}!`);
         }
     }
 
@@ -39,9 +40,10 @@ class MusicService {
         if (music !== null) {
             await music.destroy();
         } else {
-            console.log(`Não há usuário com  ID ${id}!`);
+            console.log(`Não há música com  ID ${id}!`);
         }
     }
 }
 
-module.exports = new MusicService;
+module.exports = new MusicService();
+
