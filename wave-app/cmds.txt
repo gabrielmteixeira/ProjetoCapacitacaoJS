@@ -1,2 +1,0 @@
-npm i/yarn -> att projeto
-npm start/ yarn start -> iniciar projeto
