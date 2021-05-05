@@ -26,14 +26,14 @@ import "assets/scss/paper-dashboard.scss?v=1.2.0";
 import "assets/demo/demo.css";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 
-import AdminLayout from "layouts/Admin.js";
+import AdminLayout from "./layouts/Admin.js";
 
 const hist = createBrowserHistory();
 
 ReactDOM.render(
   <Router history={hist}>
     <Switch>
-      <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
+      <Route path="/admin" render={(props: JSX.IntrinsicAttributes & JSX.IntrinsicClassAttributes<AdminLayout> & Readonly<any> & Readonly<{ children?: React.ReactNode; }>) => <AdminLayout {...props} />} />
       <Redirect to="/admin/dashboard" />
     </Switch>
   </Router>,
