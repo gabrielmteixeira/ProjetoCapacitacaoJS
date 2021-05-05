@@ -1,7 +1,10 @@
 const User = require('../models/Users');
+const bcrypt = require('bcrypt');
 
 class UserService {
     async createUser(user) {
+        const bcryptSalt = 10;
+        user.password = await bcrypt.hash(user.password, bcryptSalt);
         await User.create(user);
     }
 
@@ -11,17 +14,33 @@ class UserService {
     }
 
     async getUser(id) {
-        return await User.findByPk(id);
+        const user = await User.findByPk(id);
+
+        if (user !== null) {
+            return user;
+        } else {
+            console.log(`Não há usuário com o ID ${id}!`);
+        }
     }
 
     async alterUser(id, body) {
         const user = User.findByPk(id);
-        await user.update(body);
+
+        if (user !== null) {
+            await user.update(body);
+        } else {
+            console.log(`Não há usuário com o ID ${id}!`);
+        }
     }
 
     async deleteUser(id) {
         const user = await User.findByPk(id);
-        await user.destroy();
+
+        if (user !== null) {
+            await user.destroy();
+        } else {
+            console.log(`Não há usuário com o ID ${id}!`);
+        }
     }
 }
 

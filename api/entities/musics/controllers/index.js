@@ -1,5 +1,28 @@
 const router = require('express').Router();
+const AlbumService = require('../../albums/services/AlbumService');
 const MusicService = require('../services/MusicService');
+
+// Aceita uma ou várias músicas e as registra no album com o id passado no
+// params
+router.post('/:id', async (req, res) => {
+    try {
+        const albumId = req.params.id;
+        const {musics} = req.body;
+        if (musics.length > 0) {
+            const album = await AlbumService.getAlbumById(albumId);
+            for (music of musics) {
+                await album.createMusic(music);
+            }
+            res.status(201).json(musics);
+        } else {
+            console.log('É necessário pelo menos uma música a ser criada ' +
+            'para a utilização dessa rota');
+            res.sendStatus(400);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+});
 
 // Pegar música especifica pelo id
 router.get('/:id', async (req, res) => {
@@ -25,8 +48,8 @@ router.get('/', async (req, res) => {
 // Edit música específica
 router.put('/:id', async (req, res) => {
     try {
-        body = req.body;
-        musicId = req.params.id;
+        const body = req.body;
+        const musicId = req.params.id;
         await MusicService.updateMusicInfo(musicId, body);
 
         res.status(200).json({...body, ...{id: musicId}});
@@ -39,7 +62,7 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     try {
         const musicId = req.params.id;
-        music = await MusicService.getMusicById(musicId);
+        const music = await MusicService.getMusicById(musicId);
         await MusicService.deleteMusic(musicId);
 
         res.status(200).json(music);

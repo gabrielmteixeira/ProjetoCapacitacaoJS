@@ -1,8 +1,9 @@
 const sequelize = require('../../../database');
 const {DataTypes} = require('sequelize');
 const {nanoid} = require('nanoid');
+const Music = require('../../musics/models/Musics');
 
-const Music = sequelize.define('Musics', {
+const Album = sequelize.define('Albums', {
     id: {
         type: DataTypes.STRING(21),
         defaultValue: () => nanoid(),
@@ -42,17 +43,29 @@ const Music = sequelize.define('Musics', {
         ],
         allowNull: false,
     },
+    releaseDate: {
+        type: DataTypes.DATE,
+        allowNull: false,
+    },
+});
+
+
+Music.belongsTo(Album);
+
+Album.hasMany(Music, {
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+    hooks: true,
 });
 
 // force - This creates the table, dropping it first if it already existed
 // alter - This checks what is the current state of the table in the  database,
 // and then performs the necessary changes in the table to make it match the
 // model.
-Music.sync({alter: false, force: false})
+Album.sync({alter: false, force: false})
     .then(() => {
         console.log('User table was (re)created');
     })
     .catch((err) => console.log(err));
 
-
-module.exports = Music;
+module.exports = Album;

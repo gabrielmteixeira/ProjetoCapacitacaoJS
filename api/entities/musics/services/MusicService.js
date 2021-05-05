@@ -1,15 +1,6 @@
-const {Music} = require('../models/Musics');
+const Music = require('../models/Musics');
 
 class MusicService {
-    async createMusic(music) {
-        try {
-            const teste = await Music.create(music);
-            console.log(teste.id);
-        } catch (error) {
-            throw error;
-        }
-    }
-
     async getMusicById(id) {
         const music = await Music.findByPk(id);
 
@@ -37,6 +28,7 @@ class MusicService {
 
     async deleteMusic(id) {
         const music = await Music.findByPk(id);
+
         if (music !== null) {
             await music.destroy();
         } else {
@@ -46,4 +38,3 @@ class MusicService {
 }
 
 module.exports = new MusicService();
-

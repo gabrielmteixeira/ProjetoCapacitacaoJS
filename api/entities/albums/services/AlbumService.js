@@ -1,4 +1,4 @@
-const {Album} = require('../models/Musics');
+const Album = require('../models/Albums');
 
 class AlbumService {
     async createAlbum(album) {
@@ -11,10 +11,10 @@ class AlbumService {
     }
 
     async getAlbumById(id) {
-        const music = await Album.findByPk(id);
+        const album = await Album.findByPk(id);
 
-        if (music !== null) {
-            return music;
+        if (album !== null) {
+            return album;
         } else {
             console.log(`Não há álbum com o ID ${id}!`);
         }
@@ -28,7 +28,7 @@ class AlbumService {
     async updateAlbumInfo(id, body) {
         const album = await Album.findByPk(id);
 
-        if (music !== null) {
+        if (album !== null) {
             await album.update(body);
         } else {
             console.log(`Não há álbum com  ID ${id}!`);
@@ -37,6 +37,7 @@ class AlbumService {
 
     async deleteAlbum(id) {
         const album = await Album.findByPk(id);
+
         if (album !== null) {
             await album.destroy();
         } else {

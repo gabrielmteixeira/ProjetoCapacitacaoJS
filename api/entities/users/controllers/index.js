@@ -1,45 +1,61 @@
 const router = require('express').Router();
 const UserService = require('../services/UserService');
 
+router.post('/register', async (req, res) => {
+    const user = req.body;
+    await UserService.createUser(user);
+});
+
+router.get('/login', async (req, res) => {});
+
 router.post('/', async (req, res) => {
     try {
-        await UserService.createUser(req.body.user);
-        res.sendStatus(200);
-    } catch (e) {
-        (e) => console.log(e);
+        const {user} = req.body;
+        await UserService.createUser(user);
+        res.sendStatus(200).json(user);
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+router.get('/:id', async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const user = await UserService.getUser(userId);
+        res.json(user);
+    } catch (error) {
+        console.log(error);
     }
 });
 
 // Get All
 router.get('/', async (req, res) => {
-    const users = await UserService.getAll();
-    res.json(users);
-});
-
-router.get('/:id', async (req, res) => {
     try {
-        const user = await UserService.getUser(req.params.id);
-        res.json(user);
-    } catch (e) {
-        (e) => console.log(e);
+        const users = await UserService.getAll();
+        res.json(users);
+    } catch (error) {
+        console.log(error);
     }
 });
 
 router.put('/:id', async (req, res) => {
     try {
-        await UserService.alterUser(req.params.id, req.body.user);
-        res.senStatus(200);
-    } catch (e) {
-        (e) => console.log(e);
+        const body = req.body;
+        const userId = req.params.id;
+        const updatedUser = await UserService.alterUser(userId, body);
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        console.log(error);
     }
 });
 
 router.delete('/:id', async (req, res) => {
     try {
-        await UserService.deleteUser(req.params.id);
+        const userId = req.params.id;
+        await UserService.deleteUser(userId);
         res.sendStatus(200);
-    } catch (e) {
-        (e) => console.log(e);
+    } catch (error) {
+        console.log(error);
     }
 });
 
