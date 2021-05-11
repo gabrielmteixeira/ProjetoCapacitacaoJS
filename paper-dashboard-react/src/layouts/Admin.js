@@ -16,7 +16,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { Fragment } from "react";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
 import { Route, Switch } from "react-router-dom";
@@ -36,6 +36,7 @@ class Dashboard extends React.Component {
     this.state = {
       backgroundColor: "black",
       activeColor: "info",
+      role: "visitante",
     };
     this.mainPanel = React.createRef();
   }
@@ -76,13 +77,17 @@ class Dashboard extends React.Component {
           <DemoNavbar {...this.props} />
           <Switch>
             {routes.map((prop, key) => {
-              return (
-                <Route
-                  path={prop.layout + prop.path}
-                  component={prop.component}
-                  key={key}
-                />
-              );
+              if(prop.render.includes(this.state.role)){
+                console.log(prop.name)
+                return (
+                  <Route
+                    path={prop.layout + prop.path}
+                    component={prop.component}
+                    key={key}
+                  />
+                );
+              }
+              return("");
             })}
           </Switch>
           <Footer fluid />
