@@ -1,25 +1,29 @@
 const router = require('express').Router();
 const UserService = require('../services/UserService');
-const {loginMiddleware} = require('../../../middlewares/auth-middlewares');
+const {
+  loginMiddleware,
+  checkRole,
+  notLoggedIn} = require('../../../middlewares/auth-middlewares');
+const {upload} = require('../../../middlewares/multer');
 
-router.post('/login', loginMiddleware);
 
-router.post('/register', async (req, res) => {
+router.post('/login', notLoggedIn(), loginMiddleware);
+
+router.post('/', upload('createUser', 'user'), async (req, res) => {
   try {
-    const user = req.body;
+    const user = {
+      email: req.body.email,
+      username: req.body.username,
+      password: req.body.password,
+      name: req.body.name,
+      image: req.file ? req.file.filename : 'default-user-icon.png',
+      role: 'user',
+      musicGenre: req.body.musicGenre,
+      // birthday: req.body.birthday,
+      birthday: Date.now(),
+    };
     await UserService.createUser(user);
     res.status(204).end();
-  } catch (error) {
-    next(error);
-  }
-});
-
-
-router.post('/', async (req, res) => {
-  try {
-    const {user} = req.body;
-    await UserService.createUser(user);
-    res.sendStatus(200).json(user);
   } catch (error) {
     console.log(error);
   }

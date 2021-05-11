@@ -12,13 +12,13 @@ const User = sequelize.define('Users', {
   },
   email: {
     type: DataTypes.STRING,
-    allowNull: false,
     unique: true,
+    allowNull: false,
   },
   username: {
     type: DataTypes.STRING,
-    allowNull: false,
     unique: true,
+    allowNull: false,
   },
   password: {
     type: DataTypes.STRING,
@@ -30,12 +30,12 @@ const User = sequelize.define('Users', {
   },
   image: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
   },
   role: {
     type: DataTypes.ENUM,
     values: ['admin', 'user', 'artist'],
-    allowNull: true,
+    allowNull: false,
   },
   musicGenre: {
     type: DataTypes.ENUM,
@@ -52,9 +52,9 @@ const User = sequelize.define('Users', {
     ],
     allowNull: true,
   },
-  age: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
+  birthday: {
+    type: DataTypes.DATE,
+    allowNull: false,
   },
   purchasedMusics: {
     type: DataTypes.STRING,

@@ -40,4 +40,45 @@ function loginMiddleware(req, res, next) {
   )(req, res, next);
 }
 
-module.exports = {loginMiddleware};
+function notLoggedIn(errorMessage) {
+  return (req, res, next) => {
+    try {
+      const token = req.cookies['jwt'];
+      if (token) {
+        jwt.verify(token, process.env.SECRET_KEY,
+          (err, decoded) => {
+            if (!(err instanceof jwt.TokenExpiredError)) {
+              throw new Error(errorMessage ||
+                'Você já está logado no sistema!');
+            }
+          },
+        );
+      }
+
+      next();
+    } catch (error) {
+      next(error);
+    }
+  };
+}
+
+function checkRole(role) {
+  return function(req, res, next) {
+    try {
+      if (role === req.user.role) {
+        next();
+      } else {
+        // todo: customError
+        throw new Error('Você não tem permissão para realizar essa ação!');
+      }
+    } catch (error) {
+      next(error);
+    };
+  };
+}
+
+module.exports = {
+  loginMiddleware,
+  checkRole,
+  notLoggedIn,
+};
