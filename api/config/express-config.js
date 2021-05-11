@@ -6,8 +6,10 @@ const app = express();
 const cors = require('cors');
 app.use(cors());
 
+require('./auth');
+
 app.use(express.urlencoded({
-    extended: true,
+  extended: true,
 }));
 
 app.use(express.json());
