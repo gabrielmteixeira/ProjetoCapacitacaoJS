@@ -1,49 +1,40 @@
-const {Music} = require('../models/Musics');
+const Music = require('../models/Musics');
 
 class MusicService {
-    async createMusic(music) {
-        try {
-            const teste = await Music.create(music);
-            console.log(teste.id);
-        } catch (error) {
-            throw error;
-        }
+  async getMusicById(id) {
+    const music = await Music.findByPk(id);
+
+    if (music !== null) {
+      return music;
+    } else {
+      console.log(`Não há música com o ID ${id}!`);
     }
+  }
 
-    async getMusicById(id) {
-        const music = await Music.findByPk(id);
+  async getAllMusics() {
+    const musics = await Music.findAll();
+    return musics;
+  }
 
-        if (music !== null) {
-            return music;
-        } else {
-            console.log(`Não há música com o ID ${id}!`);
-        }
+  async updateMusicInfo(id, body) {
+    const music = await Music.findByPk(id);
+
+    if (music !== null) {
+      await music.update(body);
+    } else {
+      console.log(`Não há música com  ID ${id}!`);
     }
+  }
 
-    async getAllMusics() {
-        const musics = await Music.findAll();
-        return musics;
+  async deleteMusic(id) {
+    const music = await Music.findByPk(id);
+
+    if (music !== null) {
+      await music.destroy();
+    } else {
+      console.log(`Não há música com  ID ${id}!`);
     }
-
-    async updateMusicInfo(id, body) {
-        const music = await Music.findByPk(id);
-
-        if (music !== null) {
-            await music.update(body);
-        } else {
-            console.log(`Não há música com  ID ${id}!`);
-        }
-    }
-
-    async deleteMusic(id) {
-        const music = await Music.findByPk(id);
-        if (music !== null) {
-            await music.destroy();
-        } else {
-            console.log(`Não há música com  ID ${id}!`);
-        }
-    }
+  }
 }
 
 module.exports = new MusicService();
-
