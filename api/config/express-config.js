@@ -26,4 +26,7 @@ app.use('/albums', albumsRouter);
 const musicsRouter = require('../entities/musics/controllers');
 app.use('/musics', musicsRouter);
 
+const errorHandler = require('../middlewares/error-handler');
+app.use(errorHandler);
+
 module.exports = app;

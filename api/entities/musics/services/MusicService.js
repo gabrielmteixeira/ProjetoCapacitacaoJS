@@ -1,3 +1,4 @@
+const InvalidParamError = require('../../../errors/InvalidParamError');
 const Music = require('../models/Musics');
 
 class MusicService {
@@ -7,7 +8,7 @@ class MusicService {
     if (music !== null) {
       return music;
     } else {
-      console.log(`Não há música com o ID ${id}!`);
+      throw new InvalidParamError(`Não há música com o ID ${id}!`);
     }
   }
 
@@ -22,7 +23,7 @@ class MusicService {
     if (music !== null) {
       await music.update(body);
     } else {
-      console.log(`Não há música com  ID ${id}!`);
+      throw new InvalidParamError(`Não há música com  ID ${id}!`);
     }
   }
 
@@ -32,7 +33,7 @@ class MusicService {
     if (music !== null) {
       await music.destroy();
     } else {
-      console.log(`Não há música com  ID ${id}!`);
+      throw InvalidParamError(`Não há música com  ID ${id}!`);
     }
   }
 }

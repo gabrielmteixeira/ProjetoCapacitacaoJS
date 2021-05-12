@@ -1,5 +1,6 @@
 const User = require('../models/Users');
 const bcrypt = require('bcrypt');
+const InvalidParamError = require('../../../errors/InvalidParamError');
 
 class UserService {
   async createUser(user) {
@@ -19,7 +20,7 @@ class UserService {
     if (user !== null) {
       return user;
     } else {
-      console.log(`Não há usuário com o ID ${id}!`);
+      throw new InvalidParamError(`Não há usuário com o ID ${id}!`);
     }
   }
 
@@ -29,7 +30,7 @@ class UserService {
     if (user !== null) {
       await user.update(body);
     } else {
-      console.log(`Não há usuário com o ID ${id}!`);
+      throw new InvalidParamError(`Não há usuário com o ID ${id}!`);
     }
   }
 
@@ -39,7 +40,7 @@ class UserService {
     if (user !== null) {
       await user.destroy();
     } else {
-      console.log(`Não há usuário com o ID ${id}!`);
+      throw new InvalidParamError(`Não há usuário com o ID ${id}!`);
     }
   }
 }

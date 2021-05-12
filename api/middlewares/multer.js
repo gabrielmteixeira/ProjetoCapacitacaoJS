@@ -1,5 +1,6 @@
 const multer = require('multer');
 const path = require('path');
+const MediaTypeError = require('../errors/MediaTypeError');
 
 const allowedExtensions = ['png', 'jpg', 'jpeg'];
 
@@ -16,7 +17,8 @@ function checkFileExtension(file, callback) {
   if (isValidExtension && isValidMimeType) {
     callback(null, true);
   } else {
-    callback(new Error(`A extensão ${extension} não é válida!`), false);
+    callback(
+      new MediaTypeError(`A extensão ${extension} não é válida!`), false);
   }
 }
 
