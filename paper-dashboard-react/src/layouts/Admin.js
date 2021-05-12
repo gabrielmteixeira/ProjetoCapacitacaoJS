@@ -19,16 +19,20 @@
 import React, { Fragment } from "react";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 
 import DemoNavbar from "components/Navbars/DemoNavbar.js";
 import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
+import Error404 from "../views/Error404";
 
 import routes from "routes.js";
 
+
 var ps;
+
+
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -36,7 +40,7 @@ class Dashboard extends React.Component {
     this.state = {
       backgroundColor: "black",
       activeColor: "info",
-      role: "visitante",
+      role: "admin",
     };
     this.mainPanel = React.createRef();
   }
@@ -69,7 +73,7 @@ class Dashboard extends React.Component {
       <div className="wrapper">
         <Sidebar
           {...this.props}
-          routes={routes}
+          routes = {routes.filter((value) => { return (value.render.includes(this.state.role)) })}
           bgColor={this.state.backgroundColor}
           activeColor={this.state.activeColor}
         />
@@ -78,7 +82,6 @@ class Dashboard extends React.Component {
           <Switch>
             {routes.map((prop, key) => {
               if(prop.render.includes(this.state.role)){
-                console.log(prop.name)
                 return (
                   <Route
                     path={prop.layout + prop.path}
@@ -89,6 +92,11 @@ class Dashboard extends React.Component {
               }
                 return("");
             })}
+            <Route
+              path="/Erro404"
+              component={Error404}
+            />
+            <Redirect to="/Erro404" />
           </Switch>
           <Footer fluid />
         </div>
