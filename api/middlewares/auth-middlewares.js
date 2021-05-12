@@ -1,5 +1,6 @@
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
+const NotAuthorizedError = require('../errors/NotAuthorizedError');
 
 function loginMiddleware(req, res, next) {
   passport.authenticate(
@@ -40,6 +41,22 @@ function loginMiddleware(req, res, next) {
   )(req, res, next);
 }
 
+function jwtMiddleware(req, res, next) {
+  passport.authenticate('jwt', {session: false}, (error, user) => {
+    try {
+      if (error) next(error);
+      if (!user) {
+        throw new NotAuthorizedError('Você precisa estar logado!');
+      }
+
+      req.user = user;
+      next();
+    } catch (error) {
+      next(error);
+    }
+  })(req, res, next);
+}
+
 function notLoggedIn(errorMessage) {
   return (req, res, next) => {
     try {
@@ -48,7 +65,7 @@ function notLoggedIn(errorMessage) {
         jwt.verify(token, process.env.SECRET_KEY,
           (err, decoded) => {
             if (!(err instanceof jwt.TokenExpiredError)) {
-              throw new Error(errorMessage ||
+              throw new NotAuthorizedError(errorMessage ||
                 'Você já está logado no sistema!');
             }
           },
@@ -68,8 +85,8 @@ function checkRole(role) {
       if (role === req.user.role) {
         next();
       } else {
-        // todo: customError
-        throw new Error('Você não tem permissão para realizar essa ação!');
+        throw new NotAuthorizedError(
+          'Você não tem permissão para realizar essa ação!');
       }
     } catch (error) {
       next(error);
@@ -79,6 +96,7 @@ function checkRole(role) {
 
 module.exports = {
   loginMiddleware,
+  jwtMiddleware,
   checkRole,
   notLoggedIn,
 };
