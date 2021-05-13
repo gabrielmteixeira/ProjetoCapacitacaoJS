@@ -25,6 +25,9 @@ import Maps from "views/Map.js";
 import UserPage from "views/User.js";
 import UpgradeToPro from "views/Upgrade.js";
 
+import MeusAlbuns from "views/MeusAlbuns";
+
+/*
 var routes = [
   {
     path: "/dashboard",
@@ -84,6 +87,7 @@ var routes = [
     layout: "",
   },
 ];
+*/
 
 var allRoutes = [
   {
@@ -140,7 +144,7 @@ var allRoutes = [
     path: "/meus-albuns",
     name: "Meus Albuns",
     icon: "nc-icon nc-image",
-    component: Dashboard,
+    component: MeusAlbuns,
     layout: "",
     render: ["fa", "musico", "admin"]
   },
