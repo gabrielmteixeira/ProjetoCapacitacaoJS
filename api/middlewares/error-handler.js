@@ -4,6 +4,7 @@ const NotAuthorizedError = require('../errors/NotAuthorizedError');
 const MediaTypeError = require('../errors/MediaTypeError');
 const InvalidParamError = require('../errors/InvalidParamError');
 const PasswordTokenError = require('../errors/PasswordTokenError');
+const EmptyDatabaseError = require('../errors/EmptyDatabaseError');
 
 function errorHandler(error, req, res, next) {
   let message = error.message;
@@ -30,6 +31,10 @@ function errorHandler(error, req, res, next) {
   }
 
   if (error instanceof PasswordTokenError) {
+    status = 404; // Not Found
+  }
+
+  if (error instanceof EmptyDatabaseError) {
     status = 404; // Not Found
   }
 

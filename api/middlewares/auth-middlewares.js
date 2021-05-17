@@ -10,7 +10,6 @@ function loginMiddleware(req, res, next) {
         if (error) {
           return res.status(400).json(error);
         }
-
         req.login(user, {session: false}, (err) => {
           if (err) {
             return res.status(400).json(err);
@@ -79,10 +78,10 @@ function notLoggedIn(errorMessage) {
   };
 }
 
-function checkRole(role) {
+function checkRole(roleArr) {
   return function(req, res, next) {
     try {
-      if (role === req.user.role) {
+      if (roleArr.indexOf(req.user.role) !== -1) {
         next();
       } else {
         throw new NotAuthorizedError(

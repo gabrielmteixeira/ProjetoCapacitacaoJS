@@ -3,6 +3,8 @@ const {DataTypes} = require('sequelize');
 const {nanoid} = require('nanoid');
 const Music = require('../../musics/models/Musics');
 
+// TODO: Rever relação autor - album
+
 const Album = sequelize.define('Albums', {
   id: {
     type: DataTypes.STRING(21),

@@ -62,6 +62,8 @@ const User = sequelize.define('Users', {
   },
 });
 
+
+
 // force - This creates the table, dropping it first if it already existed
 // alter - This checks what is the current state of the table in the  database,
 // and then performs the necessary changes in the table to make it match the

@@ -1,3 +1,5 @@
+const EmptyDatabaseError = require('../../../errors/EmptyDatabaseError');
+const InvalidParamError = require('../../../errors/InvalidParamError');
 const Album = require('../models/Albums');
 
 class AlbumService {
@@ -13,36 +15,37 @@ class AlbumService {
   async getAlbumById(id) {
     const album = await Album.findByPk(id);
 
-    if (album !== null) {
-      return album;
-    } else {
-      console.log(`Não há álbum com o ID ${id}!`);
+    if (!album) {
+      throw new InvalidParamError(`Não há álbum com o ID ${id}!`);
     }
+    return album;
   }
 
   async getAllAlbums() {
     const albums = await Album.findAll();
+    if (!albums) {
+      throw new EmptyDatabaseError(
+        'Não existem entidades na tabela requisitada');
+    }
     return albums;
   }
 
   async updateAlbumInfo(id, body) {
     const album = await Album.findByPk(id);
 
-    if (album !== null) {
-      await album.update(body);
-    } else {
-      console.log(`Não há álbum com  ID ${id}!`);
+    if (!album) {
+      throw new InvalidParamError(`Não há álbum com  ID ${id}!`);
     }
+    await album.update(body);
   }
 
   async deleteAlbum(id) {
     const album = await Album.findByPk(id);
 
-    if (album !== null) {
-      await album.destroy();
-    } else {
-      console.log(`Não há álbum com  ID ${id}!`);
+    if (!album) {
+      throw InvalidParamError(`Não há álbum com  ID ${id}!`);
     }
+    await album.destroy();
   }
 }
 

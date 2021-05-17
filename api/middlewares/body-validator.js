@@ -1,5 +1,7 @@
 const {body} = require('express-validator');
 
+// TODO: Acabar os body validators
+
 module.exports = (method) => {
   switch (method) {
   case 'register': {
@@ -31,8 +33,13 @@ module.exports = (method) => {
         .withMessage('É necessário preencher o campo "nome".')
         .isAlpha('pt-BR', {ignore: ' '})
         .withMessage('O nome deve conter apenas letras'),
-      // body('role')
-      body(),
+    ];
+  }
+  case 'teste': {
+    return [
+      body('teste')
+        .exists()
+        .withMessage('Campo teste não existe'),
     ];
   }
   }
