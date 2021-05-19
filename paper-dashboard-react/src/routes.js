@@ -26,6 +26,7 @@ import UserPage from "views/User.js";
 import UpgradeToPro from "views/Upgrade.js";
 
 import MeusAlbuns from "views/MeusAlbuns";
+import Login from "views/Login"
 
 /*
 var routes = [
@@ -92,19 +93,19 @@ var routes = [
 var allRoutes = [
   {
     pro: true,
-    path: "/upgrade",
+    path: "/login",
     name: "Login",
     icon: "nc-icon nc-single-02",
-    component: UpgradeToPro,
+    component: Login,
     layout: "",
     render: ["visitante"],
   },
   {
     pro: true,
-    path: "/upgrade",
+    path: "/login",
     name: "Logout",
     icon: "nc-icon nc-user-run",
-    component: UpgradeToPro,
+    component: Login,
     layout: "",
     render: ["fa", "musico", "admin"]
   },
