@@ -14,11 +14,12 @@ router.post('/login', notLoggedIn(), loginMiddleware);
 router.post('/',
   upload('createUser', 'user'),
   userValidate('register'),
+  notLoggedIn(),
   async (req, res, next) => {
     try {
       const user = req.body;
       user.image = req.file ? req.file.filename : 'default-user-icon.png',
-      user.role = 'admin',
+      user.role = 'user',
       // \/Posteriormente será fornecido pelo fonrt e sairá daki
       user.birthday = Date.now(),
       await UserService.createUser(user);

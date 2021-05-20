@@ -1,6 +1,8 @@
-const passport = require('passport');
-const jwt = require('jsonwebtoken');
 const NotAuthorizedError = require('../errors/NotAuthorizedError');
+const passport = require('passport');
+const {unlink} = require('fs').promises;
+const jwt = require('jsonwebtoken');
+const path = require('path');
 
 function loginMiddleware(req, res, next) {
   passport.authenticate(
@@ -65,13 +67,26 @@ function notLoggedIn(errorMessage) {
         jwt.verify(token, process.env.SECRET_KEY,
           (err, decoded) => {
             if (!(err instanceof jwt.TokenExpiredError)) {
+              if (req.file) {
+                /*
+                Essa parte é pra filtrar se o user já ta logado no rota
+                register tbm.
+                Deixei assim porquê estava dando problema e a gente n
+                necessariamente precisa esperar a imagem ser deletada pra
+                responder (se achar algo pode me falar ou mudar)
+                */
+                unlink(
+                  path.resolve(
+                    __dirname,
+                    '../../paper-dashboard-react/src/assets/img/entities/users',
+                    req.file.filename),
+                );
+              }
               throw new NotAuthorizedError(errorMessage ||
                 'Você já está logado no sistema!');
             }
-          },
-        );
+          });
       }
-
       next();
     } catch (error) {
       next(error);
