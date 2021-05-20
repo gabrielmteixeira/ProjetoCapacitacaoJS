@@ -1,9 +1,9 @@
+const InvalidParamError = require('../errors/InvalidParamError');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const JWTStrategy = require('passport-jwt').Strategy;
-const User = require('../entities/users/models/Users');
+const {User} = require('../database/initializer');
 const bcrypt = require('bcrypt');
-const InvalidParamError = require('../errors/InvalidParamError');
 
 passport.use(
   'login',
