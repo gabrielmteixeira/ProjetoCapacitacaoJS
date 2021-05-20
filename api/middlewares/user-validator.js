@@ -1,8 +1,9 @@
 const {body} = require('express-validator');
+const {validate} = require('./validate');
 
 // TODO: Acabar os body validators
 
-module.exports = (method) => {
+const getValidations = (method) => {
   switch (method) {
   case 'register': {
     return [
@@ -39,8 +40,15 @@ module.exports = (method) => {
     return [
       body('teste')
         .exists()
-        .withMessage('Campo teste não existe'),
+        .withMessage('Campo teste não existe')
+        .isEmail()
+        .withMessage('Não é um email'),
     ];
   }
   }
 };
+
+module.exports = {
+  userValidate: (method) => validate(getValidations(method), 'user'),
+};
+

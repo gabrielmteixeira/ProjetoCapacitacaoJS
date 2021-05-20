@@ -18,6 +18,8 @@ router.post('/:id',
       if (musics.length > 0) {
         const album = await AlbumService.getAlbumById(albumId);
         for (music of musics) {
+          console.log(music);
+          music.image = album.image;
           await album.createMusic(music);
         }
         res.status(201).json(musics);
@@ -37,7 +39,6 @@ router.get('/:id',
   async (req, res, next) => {
     try {
       const music = await MusicService.getMusicById(req.params.id);
-
       res.status(200).json(music);
     } catch (error) {
       next(error);
@@ -65,7 +66,6 @@ router.patch('/:id',
       const body = req.body;
       const musicId = req.params.id;
       await MusicService.updateMusicInfo(musicId, body);
-
       res.status(200).json({...body, ...{id: musicId}});
     } catch (error) {
       next(error);
@@ -81,9 +81,8 @@ router.delete('/:id',
       const musicId = req.params.id;
       const music = await MusicService.getMusicById(musicId);
       await MusicService.deleteMusic(musicId);
-
       res.status(200).json(music);
-    } catch (e) {
+    } catch (error) {
       next(error);
     }
   },

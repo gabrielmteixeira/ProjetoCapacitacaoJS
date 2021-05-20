@@ -20,7 +20,6 @@ passport.use(
         }
 
         const matchingPassword = await bcrypt.compare(password, user.password);
-
         if (!matchingPassword) {
           throw new InvalidParamError('Senha incorreta');
         }
@@ -35,11 +34,9 @@ passport.use(
 
 const cookieExtractor = (req) => {
   let token = null;
-
   if (req && req.cookies) {
     token = req.cookies['jwt'];
   }
-
   return token;
 };
 

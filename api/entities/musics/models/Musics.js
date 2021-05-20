@@ -28,30 +28,9 @@ const Music = sequelize.define('Musics', {
     allowNull: false,
   },
   genre: {
-    type: DataTypes.ENUM,
-    values: [
-      'Rock',
-      'Pop',
-      'Hip-Hop',
-      'Rap',
-      'Eletronica',
-      'Sertanejo',
-      'Funk',
-      'Indie',
-      'Others',
-    ],
+    type: DataTypes.STRING,
     allowNull: false,
   },
 });
-
-// force - This creates the table, dropping it first if it already existed
-// alter - This checks what is the current state of the table in the  database,
-// and then performs the necessary changes in the table to make it match the
-// model.
-Music.sync({alter: false, force: false})
-  .then(() => {
-    console.log('User table was (re)created');
-  })
-  .catch((err) => console.log(err));
 
 module.exports = Music;

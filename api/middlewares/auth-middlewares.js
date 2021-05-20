@@ -10,6 +10,7 @@ function loginMiddleware(req, res, next) {
         if (error) {
           return res.status(400).json(error);
         }
+
         req.login(user, {session: false}, (err) => {
           if (err) {
             return res.status(400).json(err);
@@ -30,7 +31,6 @@ function loginMiddleware(req, res, next) {
             httpOnly: true,
             secure: process.env.NODE_ENV == 'production',
           });
-
           res.status(200).end();
         });
       } catch (error) {
@@ -44,6 +44,7 @@ function jwtMiddleware(req, res, next) {
   passport.authenticate('jwt', {session: false}, (error, user) => {
     try {
       if (error) next(error);
+
       if (!user) {
         throw new NotAuthorizedError('Você precisa estar logado!');
       }

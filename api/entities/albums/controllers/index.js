@@ -13,15 +13,10 @@ router.post('/',
   upload('createAlbum', 'album'),
   async (req, res, next) => {
     try {
-      const newAlbum = {
-        author: req.body.author,
-        name: req.body.name,
-        image: req.file ? req.file.filename : 'default-album-icon.png',
-        duration: req.body.duration,
-        genre: req.body.genre,
-        releaseDate: new Date().getDay(), // Na prática virá na
-        // requisição
-      };
+      const newAlbum = req.body;
+      newAlbum.image = req.file ? req.file.filename : 'default-album-icon.png';
+      newAlbum.releaseDate = new Date().getDay(); // Na prática virá na
+      // requisição
       const createdAlbum = await AlbumService.createAlbum(newAlbum);
       res.status(201).json(createdAlbum);
     } catch (error) {
@@ -57,14 +52,16 @@ router.get('/',
 );
 
 router.patch('/:id',
-  checkRole(['artist']),
+  checkRole(['artist', 'admin']),
   upload('updateAlbum', 'album'),
   async (req, res, next) => {
     try {
       // terminar de implementar upload de foto
       const body = req.body;
+      body.image = req.file ? req.file.filename : undefined;
       const albumId = req.params.id;
       await AlbumService.updateAlbumInfo(albumId, body);
+      res.status(200).end();
     } catch (error) {
       next(error);
     }
@@ -73,7 +70,7 @@ router.patch('/:id',
 
 // Deletar album e consequentemente todas as suas músicas
 router.delete('/:id',
-  checkRole(['artist, admin']),
+  checkRole(['artist', 'admin']),
   async (req, res, next) => {
     try {
       const albumId = req.params.id;
