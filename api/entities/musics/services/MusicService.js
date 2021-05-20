@@ -1,6 +1,6 @@
 const EmptyDatabaseError = require('../../../errors/EmptyDatabaseError');
 const InvalidParamError = require('../../../errors/InvalidParamError');
-const Music = require('../models/Musics');
+const {Music} = require('../../../database/initializer');
 
 class MusicService {
   async getMusicById(id) {

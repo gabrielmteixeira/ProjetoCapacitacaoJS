@@ -1,7 +1,7 @@
 const MediaTypeError = require('../errors/MediaTypeError');
 const multer = require('multer');
 const path = require('path');
-const Album = require('../entities/albums/models/Albums');
+const {Album} = require('../database/initializer');
 
 const allowedExtensions = ['png', 'jpg', 'jpeg'];
 

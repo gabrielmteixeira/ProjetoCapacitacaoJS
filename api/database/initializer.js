@@ -17,20 +17,26 @@ Album.hasMany(Music, {
 // and then performs the necessary changes in the table to make it match the
 // model.
 
-Album.sync({alter: true, force: true})
+Album.sync({alter: false, force: false})
   .then(() => {
     console.log('User table was (re)created');
   })
   .catch((err) => console.log(err));
 
-Music.sync({alter: true, force: true})
+Music.sync({alter: false, force: false})
   .then(() => {
     console.log('User table was (re)created');
   })
   .catch((err) => console.log(err));
 
-User.sync({alter: true, force: true})
+User.sync({alter: false, force: false})
   .then(() => {
     console.log('User table was (re)created');
   })
   .catch((err) => console.log(err));
+
+module.exports = {
+  Album,
+  Music,
+  User,
+};

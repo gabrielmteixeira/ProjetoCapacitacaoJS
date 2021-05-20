@@ -1,6 +1,6 @@
 const EmptyDatabaseError = require('../../../errors/EmptyDatabaseError');
 const InvalidParamError = require('../../../errors/InvalidParamError');
-const Album = require('../models/Albums');
+const Album = require('../../../database/initializer');
 const {unlink} = require('fs').promises;
 const path = require('path');
 

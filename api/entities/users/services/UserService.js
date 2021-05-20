@@ -2,8 +2,8 @@ const EmptyDatabaseError = require('../../../errors/EmptyDatabaseError');
 const InvalidParamError = require('../../../errors/InvalidParamError');
 const bcrypt = require('bcrypt');
 const {unlink} = require('fs').promises;
+const {User} = require('../../../database/initializer');
 const path = require('path');
-const User = require('../models/Users');
 
 class UserService {
   async createUser(user) {
