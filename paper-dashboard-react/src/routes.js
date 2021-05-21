@@ -117,14 +117,14 @@ var allRoutes = [
     layout: "",
     render: ["visitante", "fa", "musico", "admin"]
   },
-  {
-    path: "/home",
-    name: "Home",
-    icon: "nc-icon nc-shop",
-    component: Dashboard,
-    layout: "",
-    render: ["visitante", "fa", "musico", "admin"]
-  },
+  // {
+  //   path: "/home",
+  //   name: "Home",
+  //   icon: "nc-icon nc-shop",
+  //   component: Dashboard,
+  //   layout: "",
+  //   render: ["visitante", "fa", "musico", "admin"]
+  // },
   {
     path: "/buscar",
     name: "Buscar",

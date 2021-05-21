@@ -24,7 +24,6 @@ import {
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
   CardTitle,
   Container,
   FormGroup,
@@ -35,6 +34,26 @@ import {
 } from "reactstrap";
 
 class User extends React.Component {
+
+  //TESTE FORMULÁRIO
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {value: ''};
+
+  //   this.handleChange = this.handleChange.bind(this);
+  //   this.handleSubmit = this.handleSubmit.bind(this);
+  // }
+
+  // handleChange(event){
+  //   this.setState({value:event.target.value});
+  // }
+
+  // handleSubmit(event){
+    
+  //   event.preventDefault();
+  //   alert('submit' + this.state.value)
+  // }
+
   render() {
     return (
       <>
@@ -62,7 +81,7 @@ class User extends React.Component {
                       <FormGroup>
                         <label>Username</label>
                         <Input
-                          defaultValue="michael23"
+                          defaultValue="Michael"
                           placeholder="Username"
                           type="text"
                         />

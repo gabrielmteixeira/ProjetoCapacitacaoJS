@@ -25,7 +25,10 @@ import DemoNavbar from "components/Navbars/DemoNavbar.js";
 import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
+
+
 import Error404 from "../views/Error404";
+import Dash from "../views/Dashboard.js";
 
 import routes from "routes.js";
 
@@ -95,6 +98,11 @@ class Dashboard extends React.Component {
             <Route
               path="/Erro404"
               component={Error404}
+            />
+            <Route
+              exact
+              path="/"
+              component={Dash}
             />
             <Redirect to="/Erro404" />
           </Switch>
