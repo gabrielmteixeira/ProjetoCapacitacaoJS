@@ -17,6 +17,7 @@
 
 */
 import React from "react";
+import { Redirect } from "react-router";
 
 // reactstrap components
 import {
@@ -34,7 +35,7 @@ import {
 } from "reactstrap";
 
 class User extends React.Component {
-
+  
   //TESTE FORMULÁRIO
   // constructor(props) {
   //   super(props);
@@ -191,3 +192,29 @@ class User extends React.Component {
 }
 
 export default User;
+
+const styles = {
+  wrapper:{
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    padding: '50px',
+    color: '#444',
+    border: '1px solid #1890ff',
+  },
+  button:{
+    padding: '10px 20px',
+    border: 'none',
+    borderRadius: '4px',
+    background: '#1890ff',
+    color: '#fff',
+    fontSize: '14px',
+    cursor: 'pointer',
+    transition: '.3s background',
+    '&:hover': {
+      background: '#40a9ff'
+    }
+  }
+}
