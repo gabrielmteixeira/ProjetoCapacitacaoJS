@@ -52,19 +52,22 @@ const getValidations = (method) => {
           'Sua senha deve conter pelo menos 8 caracteres, ' +
             'com pelo menos um número, uma letra maiúscula e um caractér ' +
             'especial',
-        )
+        ),
         // Apenas brincando com as possibilidades do express validator
+        /*
         .custom((value, {req}) => {
           if (value !== req.body.passwordConfirmation) {
             return false;
           }
         })
         .withMessage('Senha e confirmação de senha não coincidem.'),
+        */
       body('name')
         .exists()
         .withMessage('É necessário preencher o campo "nome".')
         .isAlpha('pt-BR', {ignore: ' '})
         .withMessage('O nome deve conter apenas letras'),
+      /*
       body('birthday')
         .exists()
         .withMessage('É necessário preencher o campo "data de nascimento"')
@@ -72,6 +75,7 @@ const getValidations = (method) => {
         .withMessage(
           'A data de nascimento é inválida, até onde sei você não pode ter ' +
             'vindo do futuro'),
+      */
     ];
   }
   case 'login': {

@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const AlbumService = require('../../albums/services/AlbumService');
 const MusicService = require('../services/MusicService');
+const CustomerMusicService = require(
+  '../../users/services/CustomerMusicService');
 const InvalidParamError = require('../../../errors/InvalidParamError');
 const {
   jwtMiddleware,
@@ -11,6 +13,7 @@ router.use(jwtMiddleware);
 // Aceita uma ou várias músicas e as registra no album com o id passado no
 // params
 router.post('/:id',
+  checkRole(['artist']),
   async (req, res, next) => {
     try {
       const albumId = req.params.id;
@@ -28,6 +31,20 @@ router.post('/:id',
           'É necessário pelo menos uma música a ser criada ' +
             'para a utilização dessa rota');
       }
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// Comprar música
+router.post('/store/:id',
+  async (req, res, next) => {
+    try {
+      const userId = req.user.id;
+      const musicId = req.params.id;
+      CustomerMusicService.buyMusic(userId, musicId);
+      res.status(200).send('foi');
     } catch (error) {
       next(error);
     }
