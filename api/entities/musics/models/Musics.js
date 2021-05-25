@@ -10,11 +10,6 @@ const Music = sequelize.define('Musics', {
     allowNull: false,
     unique: true,
   },
-  author: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-  },
   name: {
     type: DataTypes.STRING,
     allowNull: false,

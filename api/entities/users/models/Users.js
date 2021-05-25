@@ -45,10 +45,6 @@ const User = sequelize.define('Users', {
     type: DataTypes.DATE,
     allowNull: false,
   },
-  purchasedMusics: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
 });
 
 module.exports = User;
