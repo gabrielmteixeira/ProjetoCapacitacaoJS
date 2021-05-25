@@ -6,7 +6,6 @@
  * @param {string[]} keys Nomes das chaves desejadas dentro do objeto passado
  * @return {null}
  */
-
 function requestFilter(object, keys) {
   return function(req, res, next) {
     try {
@@ -20,6 +19,8 @@ function requestFilter(object, keys) {
       next(error);
     }
   };
-};
+}
 
-module.exports - {requestFilter};
+module.exports = {
+  requestFilter,
+};

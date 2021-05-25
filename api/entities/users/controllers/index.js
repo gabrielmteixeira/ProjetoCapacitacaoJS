@@ -4,22 +4,39 @@ const {
   loginMiddleware,
   jwtMiddleware,
   checkRole,
-  notLoggedIn} = require('../../../middlewares/auth-middlewares');
+  notLoggedIn,
+} = require('../../../middlewares/auth-middlewares');
 const {upload} = require('../../../middlewares/multer');
 const {userValidate} = require('../../../middlewares/user-validator');
+const {requestFilter} = require('../../../middlewares/object-filter');
 
+router.post('/login',
+  requestFilter('body', ['email', 'password']),
+  notLoggedIn(),
+  loginMiddleware);
 
-router.post('/login', notLoggedIn(), loginMiddleware);
-
-router.post('/',
+router.post(
+  '/',
   upload('createUser', 'user'),
-  userValidate('register'),
+  requestFilter('body', [
+    'email',
+    'username',
+    'password',
+    'passwordConfirmation',
+    'name',
+    'image',
+    'role',
+    // Not sure about musicGenre
+    'musicGenre',
+    'birthday',
+  ]),
+  userValidate('registerUser'),
   notLoggedIn(),
   async (req, res, next) => {
     try {
       const user = req.body;
-      user.image = req.file ? req.file.filename : 'default-user-icon.png',
-      user.role = 'user',
+      user.image = req.file ? req.file.filename : 'default-user-icon.png';
+      user.role = 'user';
       // \/Posteriormente será fornecido pelo fonrt e sairá daki
       user.birthday = Date.now(),
       await UserService.createUser(user);
@@ -29,7 +46,6 @@ router.post('/',
     }
   },
 );
-
 
 router.get('/:id',
   jwtMiddleware,
@@ -45,21 +61,30 @@ router.get('/:id',
 );
 
 // Get All
-router.get('/',
-  jwtMiddleware,
-  async (req, res, next) => {
-    try {
-      const users = await UserService.getAll();
-      res.json(users);
-    } catch (error) {
-      next(error);
-    }
-  },
-);
+router.get('/', jwtMiddleware, async (req, res, next) => {
+  try {
+    const users = await UserService.getAll();
+    res.json(users);
+  } catch (error) {
+    next(error);
+  }
+});
 
-router.patch('/:id',
+router.patch(
+  '/:id',
   jwtMiddleware,
   upload('updateUser', 'user'),
+  requestFilter('body', [
+    'email',
+    'username',
+    'password',
+    'name',
+    'image',
+    'role',
+    // Not sure about musicGenre
+    'musicGenre',
+    'birthday',
+  ]),
   async (req, res, next) => {
     try {
       // terminar de implementar upload de foto
@@ -74,7 +99,8 @@ router.patch('/:id',
   },
 );
 
-router.delete('/:id',
+router.delete(
+  '/:id',
   jwtMiddleware,
   checkRole(['admin']),
   async (req, res, next) => {
