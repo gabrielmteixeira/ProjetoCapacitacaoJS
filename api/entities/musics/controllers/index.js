@@ -44,7 +44,7 @@ router.post('/store/:id',
       const userId = req.user.id;
       const musicId = req.params.id;
       CustomerMusicService.buyMusic(userId, musicId);
-      res.status(200).send('foi');
+      res.status(200).json('Compra realizada!');
     } catch (error) {
       next(error);
     }

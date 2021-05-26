@@ -5,7 +5,7 @@ const Music = require('../entities/musics/models/Musics');
 
 // The purpose of this file is to initialize the tables relations and sync them
 // with the DB
-Album.belongsTo(User);
+Album.belongsTo(User, {as: 'author'});
 User.hasMany(Album, {
   onDelete: 'cascade',
   onUpdate: 'cascade',

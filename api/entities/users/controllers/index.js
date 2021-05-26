@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const UserService = require('../services/UserService');
+const CustomerMusicService = require('../services/CustomerMusicService');
 const {
   loginMiddleware,
   jwtMiddleware,
@@ -60,11 +61,26 @@ router.get('/:id',
   },
 );
 
+// Get one user's musics
+
+router.get('/:id/musics',
+  jwtMiddleware,
+  async (req, res, next) => {
+    try {
+      const userId = req.params.id;
+      const userMusics = await CustomerMusicService.getMusics(userId);
+      res.status(200).json(userMusics);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
 // Get All
 router.get('/', jwtMiddleware, async (req, res, next) => {
   try {
     const users = await UserService.getAll();
-    res.json(users);
+    res.status(200).json(users);
   } catch (error) {
     next(error);
   }

@@ -1,16 +1,22 @@
-const {Music, Album, CustomerMusic} = require('../../../database/initializer');
-
+const {CustomerMusic} = require('../../../database/initializer');
+const MusicService = require('../../musics/services/MusicService');
 class CustomerMusicService {
   async getMusics(userId) {
     try {
-      const userMusics = await CustomerMusic.find({userId: userId});
-      console.log(userMusics);
+      const userMusicsRelations = await CustomerMusic.findAll({userId: userId});
+      const userMusics = [];
+      for (const musicRelation of userMusicsRelations) {
+        const musicId = musicRelation.musicId;
+        const music = await MusicService.getMusicById(musicId);
+        userMusics.push(music);
+      }
+      return userMusics;
     } catch (error) {
       throw error;
     }
   }
 
-  async checKHaveMusic(userId) {}
+  async checkHaveMusic(userId, musicId) {}
 
   async buyMusic(userId, musicId) {
     try {
