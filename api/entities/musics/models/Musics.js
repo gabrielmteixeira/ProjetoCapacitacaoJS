@@ -26,6 +26,15 @@ const Music = sequelize.define('Musics', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  authorId: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    foreignKey: true,
+    references: {
+      model: 'Users',
+      key: 'id',
+    },
+  },
 });
 
 module.exports = Music;
