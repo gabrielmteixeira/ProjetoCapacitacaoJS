@@ -10,12 +10,13 @@ function loginMiddleware(req, res, next) {
     (error, user) => {
       try {
         if (error) {
-          return res.status(400).json(error);
+          throw error;
         }
 
         req.login(user, {session: false}, (err) => {
+          console.log(err);
           if (err) {
-            return res.status(400).json(err);
+            throw err;
           }
 
           // Aqui ficam as informações a serem guardadas no cookie (jwt)
@@ -33,7 +34,7 @@ function loginMiddleware(req, res, next) {
             httpOnly: true,
             secure: process.env.NODE_ENV == 'production',
           });
-          res.status(200).end();
+          res.status(200).send('Logado com sucesso!');
         });
       } catch (error) {
         next(error);
