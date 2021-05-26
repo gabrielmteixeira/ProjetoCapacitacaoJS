@@ -1,9 +1,12 @@
 const AlbumService = require('../services/AlbumService');
+const UserService = require('../../users/services/UserService');
 const router = require('express').Router();
 const {
   jwtMiddleware,
   checkRole} = require('../../../middlewares/auth-middlewares');
 const {upload} = require('../../../middlewares/multer');
+const CustomerMusicService = require(
+  '../../users/services/CustomerMusicService');
 
 router.use(jwtMiddleware);
 
@@ -14,16 +17,34 @@ router.post('/',
   async (req, res, next) => {
     try {
       const newAlbum = req.body;
+      const authorId = req.user.id;
       newAlbum.image = req.file ? req.file.filename : 'default-album-icon.png';
       newAlbum.releaseDate = new Date().getDay(); // Na prática virá na
       // requisição
       const createdAlbum = await AlbumService.createAlbum(newAlbum);
+      const author = await UserService.getUser(authorId);
+      createdAlbum.setAuthor(author);
       res.status(201).json(createdAlbum);
     } catch (error) {
       next(error);
     }
   },
 );
+
+// Comprar album
+router.post('/store/:id',
+  async (req, res, next) => {
+    try {
+      const userId = req.user.id;
+      const albumId = req.params.id;
+      CustomerMusicService.buyAlbum(userId, albumId);
+      res.status(200).json('Compra realizada!');
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
 
 // Pegar todas as músicas pertencentes a determinado album pelo id (do album)
 router.get('/:id',
@@ -39,7 +60,6 @@ router.get('/:id',
   },
 );
 
-// Pegar todos os albuns
 router.get('/',
   async (req, res, next) => {
     try {
