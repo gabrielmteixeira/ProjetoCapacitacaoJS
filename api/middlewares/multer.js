@@ -1,6 +1,7 @@
+const MediaTypeError = require('../errors/MediaTypeError');
 const multer = require('multer');
 const path = require('path');
-const MediaTypeError = require('../errors/MediaTypeError');
+const {Album} = require('../database/initializer');
 
 const allowedExtensions = ['png', 'jpg', 'jpeg'];
 
@@ -31,17 +32,28 @@ function storage(method, type) {
       } else if (type == 'user') {
         dir = 'users';
       }
+
       const uploadFolder = path.resolve(
         __dirname,
-        '../../paper-dashboard-react/src/assets/img/entities/' +
+        '../../paper-dashboard-react/src/assets/img/entities/',
         dir);
       callback(null, uploadFolder);
     },
-    filename: (req, file, callback) => {
+    filename: async (req, file, callback) => {
       const ext = path.extname(file.originalname);
-      const filename = Date.now() + ext;
+      let filename = Date.now() + ext;
+      if (method === 'updateUser') {
+        if (req.user && req.user.image !== 'default-user-icon.png') {
+          filename = req.user.image;
+        }
+      } else if (method === 'updateAlbum') {
+        const albumID = req.params.id;
+        const album = await Album.findByPk(albumID);
+        if (album.image !== 'default-album-icon.png') {
+          filename = album.image;
+        }
+      }
       callback(null, filename);
-      // Aqui entram os methods
     },
   });
 };

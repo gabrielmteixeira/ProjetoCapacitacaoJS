@@ -43,25 +43,27 @@ class MeusAlbuns extends React.Component {
                 </CardHeader>
                 <CardBody>
 					
-					<Col>
-						<Row>
-							<Card style={{width:400}}>
+					      <Col>
+						      <Row>
+							      <Card style={{width:400}}>
 											<CardBody style={{width:400, height: 400}} >
-												<div className="album" style={{ display: "flex", alignItems: "center"}}>
+												<div className="album" style={{ display: "flex", alignItems: "center", flexWrap:"wrap", justifyContent:"center" }}>
 													<a href="#pablo" onClick={(e) => e.preventDefault()}>
-													<img
-														alt="..."
-														className="albumImg"
-														src={require("assets/img/albuns/random_access_memories_album_cover.jpg")}
-														style={{width:200,height:200}}
-													/>
-													<h5 className="title">Random Access Memories</h5>
+                          <div style={{ display: "flex", alignItems: "center", flexWrap:"wrap", justifyContent:"center" }}>
+                            <img
+                              alt="..."
+                              className="albumImg"
+                              src={require("assets/img/albuns/random_access_memories_album_cover.jpg")}
+                              style={{width:200,height:200}}
+                            />
+                            <h5 className="title">Random Access Memories</h5>
+                          </div>
 													</a>
 													<p className="description">por Daft Punk</p>
 												</div>
 											</CardBody>
-							</Card>
-							<Card style={{width:400}}>
+							      </Card>
+							      <Card style={{width:400}}>
 											<CardBody >
 												<div className="album" >
 													<a href="#pablo" onClick={(e) => e.preventDefault()}>

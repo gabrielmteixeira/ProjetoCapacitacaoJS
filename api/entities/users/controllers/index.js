@@ -1,35 +1,54 @@
 const router = require('express').Router();
 const UserService = require('../services/UserService');
+const CustomerMusicService = require(
+  '../../users/services/CustomerMusicService');
 const {
   loginMiddleware,
   jwtMiddleware,
   checkRole,
-  notLoggedIn} = require('../../../middlewares/auth-middlewares');
+  notLoggedIn,
+} = require('../../../middlewares/auth-middlewares');
 const {upload} = require('../../../middlewares/multer');
+const {userValidate} = require('../../../middlewares/user-validator');
+const {requestFilter} = require('../../../middlewares/object-filter');
 
+router.post('/login',
+  requestFilter('body', ['email', 'password']),
+  notLoggedIn(),
+  userValidate('login'),
+  loginMiddleware);
 
-router.post('/login', notLoggedIn(), loginMiddleware);
-
-router.post('/', upload('createUser', 'user'), async (req, res, next) => {
-  try {
-    const user = {
-      email: req.body.email,
-      username: req.body.username,
-      password: req.body.password,
-      name: req.body.name,
-      image: req.file ? req.file.filename : 'default-user-icon.png',
-      role: 'user',
-      musicGenre: req.body.musicGenre,
-      // birthday: req.body.birthday,
-      birthday: Date.now(),
-    };
-    await UserService.createUser(user);
-    res.status(204).end();
-  } catch (error) {
-    next(error);
-  }
-});
-
+router.post(
+  '/',
+  upload('createUser', 'user'),
+  requestFilter('body', [
+    'email',
+    'username',
+    'password',
+    'passwordConfirmation',
+    'name',
+    'image',
+    'role',
+    // Not sure about musicGenre
+    'musicGenre',
+    'birthday',
+  ]),
+  notLoggedIn(),
+  userValidate('registerUser'),
+  async (req, res, next) => {
+    try {
+      const user = req.body;
+      user.image = req.file ? req.file.filename : 'default-user-icon.png';
+      user.role = 'user';
+      // \/Posteriormente será fornecido pelo fonrt e sairá daki
+      user.birthday = Date.now(),
+      await UserService.createUser(user);
+      res.status(204).end();
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 router.get('/:id',
   jwtMiddleware,
@@ -44,26 +63,51 @@ router.get('/:id',
   },
 );
 
-// Get All
-router.get('/',
+// Get one user's musics
+router.get('/:id/musics',
   jwtMiddleware,
   async (req, res, next) => {
     try {
-      const users = await UserService.getAll();
-      res.json(users);
+      const userId = req.params.id;
+      console.log(userId);
+      const userMusics = await CustomerMusicService.getMusics(userId);
+      res.status(200).json(userMusics);
     } catch (error) {
       next(error);
     }
   },
 );
 
-router.patch('/:id',
+// Get All
+router.get('/', jwtMiddleware, async (req, res, next) => {
+  try {
+    const users = await UserService.getAll();
+    res.status(200).json(users);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.patch(
+  '/:id',
   jwtMiddleware,
   upload('updateUser', 'user'),
+  requestFilter('body', [
+    'email',
+    'username',
+    'password',
+    'name',
+    'image',
+    'role',
+    // Not sure about musicGenre
+    'musicGenre',
+    'birthday',
+  ]),
   async (req, res, next) => {
     try {
       // terminar de implementar upload de foto
       const body = req.body;
+      body.image = req.file ? req.file.fillename : undefined;
       const userId = req.params.id;
       const updatedUser = await UserService.alterUser(userId, body);
       res.status(200).json(updatedUser);
@@ -73,8 +117,10 @@ router.patch('/:id',
   },
 );
 
-router.delete('/:id',
+router.delete(
+  '/:id',
   jwtMiddleware,
+  checkRole(['admin']),
   async (req, res, next) => {
     try {
       const userId = req.params.id;

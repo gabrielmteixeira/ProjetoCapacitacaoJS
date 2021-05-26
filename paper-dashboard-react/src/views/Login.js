@@ -17,6 +17,7 @@
 
 */
 import React from "react";
+import { Redirect } from "react-router";
 
 // reactstrap components
 import {
@@ -24,7 +25,6 @@ import {
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
   CardTitle,
   Container,
   FormText,
@@ -36,6 +36,26 @@ import {
 } from "reactstrap";
 
 class User extends React.Component {
+  
+  //TESTE FORMULÁRIO
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {value: ''};
+
+  //   this.handleChange = this.handleChange.bind(this);
+  //   this.handleSubmit = this.handleSubmit.bind(this);
+  // }
+
+  // handleChange(event){
+  //   this.setState({value:event.target.value});
+  // }
+
+  // handleSubmit(event){
+    
+  //   event.preventDefault();
+  //   alert('submit' + this.state.value)
+  // }
+
   render() {
     return (
       <>
@@ -60,7 +80,7 @@ class User extends React.Component {
                       <FormGroup>
                         <label>Username</label>
                         <Input
-                          defaultValue="michael23"
+                          defaultValue="Michael"
                           placeholder="Username"
                           type="text"
                         />
@@ -159,3 +179,29 @@ class User extends React.Component {
 }
 
 export default User;
+
+const styles = {
+  wrapper:{
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    padding: '50px',
+    color: '#444',
+    border: '1px solid #1890ff',
+  },
+  button:{
+    padding: '10px 20px',
+    border: 'none',
+    borderRadius: '4px',
+    background: '#1890ff',
+    color: '#fff',
+    fontSize: '14px',
+    cursor: 'pointer',
+    transition: '.3s background',
+    '&:hover': {
+      background: '#40a9ff'
+    }
+  }
+}

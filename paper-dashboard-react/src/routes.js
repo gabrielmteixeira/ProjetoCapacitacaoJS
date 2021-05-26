@@ -118,7 +118,7 @@ var allRoutes = [
     render: ["visitante", "fa", "musico", "admin"]
   },
   {
-    path: "/home",
+    path: "/",
     name: "Home",
     icon: "nc-icon nc-shop",
     component: Dashboard,

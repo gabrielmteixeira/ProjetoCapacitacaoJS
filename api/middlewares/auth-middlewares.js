@@ -1,6 +1,8 @@
-const passport = require('passport');
-const jwt = require('jsonwebtoken');
 const NotAuthorizedError = require('../errors/NotAuthorizedError');
+const passport = require('passport');
+const {unlink} = require('fs').promises;
+const jwt = require('jsonwebtoken');
+const path = require('path');
 
 function loginMiddleware(req, res, next) {
   passport.authenticate(
@@ -8,11 +10,13 @@ function loginMiddleware(req, res, next) {
     (error, user) => {
       try {
         if (error) {
-          return res.status(400).json(error);
+          throw error;
         }
+
         req.login(user, {session: false}, (err) => {
+          console.log(err);
           if (err) {
-            return res.status(400).json(err);
+            throw err;
           }
 
           // Aqui ficam as informações a serem guardadas no cookie (jwt)
@@ -30,8 +34,7 @@ function loginMiddleware(req, res, next) {
             httpOnly: true,
             secure: process.env.NODE_ENV == 'production',
           });
-
-          res.status(200).end();
+          res.status(200).send('Logado com sucesso!');
         });
       } catch (error) {
         next(error);
@@ -44,6 +47,7 @@ function jwtMiddleware(req, res, next) {
   passport.authenticate('jwt', {session: false}, (error, user) => {
     try {
       if (error) next(error);
+
       if (!user) {
         throw new NotAuthorizedError('Você precisa estar logado!');
       }
@@ -64,13 +68,26 @@ function notLoggedIn(errorMessage) {
         jwt.verify(token, process.env.SECRET_KEY,
           (err, decoded) => {
             if (!(err instanceof jwt.TokenExpiredError)) {
+              if (req.file) {
+                /*
+                Essa parte é pra filtrar se o user já ta logado no rota
+                register tbm.
+                Deixei assim porquê estava dando problema e a gente n
+                necessariamente precisa esperar a imagem ser deletada pra
+                responder (se achar algo pode me falar ou mudar)
+                */
+                unlink(
+                  path.resolve(
+                    __dirname,
+                    '../../paper-dashboard-react/src/assets/img/entities/users',
+                    req.file.filename),
+                );
+              }
               throw new NotAuthorizedError(errorMessage ||
                 'Você já está logado no sistema!');
             }
-          },
-        );
+          });
       }
-
       next();
     } catch (error) {
       next(error);

@@ -25,7 +25,10 @@ import DemoNavbar from "components/Navbars/DemoNavbar.js";
 import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
+
+
 import Error404 from "../views/Error404";
+import Dash from "../views/Dashboard.js";
 
 import routes from "routes.js";
 
@@ -40,10 +43,12 @@ class Dashboard extends React.Component {
     this.state = {
       backgroundColor: "black",
       activeColor: "info",
-      role: "admin",
+      role: "visitante",
     };
     this.mainPanel = React.createRef();
+   
   }
+  
   componentDidMount() {
     if (navigator.platform.indexOf("Win") > -1) {
       ps = new PerfectScrollbar(this.mainPanel.current);
@@ -73,7 +78,7 @@ class Dashboard extends React.Component {
       <div className="wrapper">
         <Sidebar
           {...this.props}
-          routes = {routes.filter((value) => { return (value.render.includes(this.state.role)) })}
+          routes = {(routes.filter((value) => { return (value.render.includes(this.state.role))}))}
           bgColor={this.state.backgroundColor}
           activeColor={this.state.activeColor}
         />
@@ -84,6 +89,7 @@ class Dashboard extends React.Component {
               if(prop.render.includes(this.state.role)){
                 return (
                   <Route
+                    exact = {prop.name == "Home"}
                     path={prop.layout + prop.path}
                     component={prop.component}
                     key={key}
