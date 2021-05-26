@@ -1,7 +1,8 @@
+const InvalidParamError = require('../errors/InvalidParamError');
 const {body} = require('express-validator');
 const {validate} = require('./validate');
 const {User} = require('../database/initializer');
-
+const bcrypt = require('bcrypt');
 
 // TODO: Acabar os body validators
 
@@ -19,14 +20,15 @@ const getValidations = (method) => {
         .isEmail()
         .withMessage('O email inserido não é válido')
         .custom((value)=> {
-          return User.findOne({email: value})
+          return User.findOne({where: {email: value}})
             .then((user)=> {
               if (user) {
-                return false;
+                return Promise.reject(
+                  new InvalidParamError('O email inserido já está em uso.'));
               }
+              return Promise.resolve();
             });
-        })
-        .withMessage('O email inserido já está em uso.'),
+        }),
       body('username')
         .exists()
         .withMessage('É necessário preencher o campo "nome de usuário".')
@@ -36,14 +38,16 @@ const getValidations = (method) => {
           'o nome de usuário deve conter apenas letras e números.',
         )
         .custom((value)=> {
-          return User.findOne({username: value})
+          return User.findOne({where: {username: value}})
             .then((user)=> {
               if (user) {
-                return false;
+                return Promise.reject(
+                  new InvalidParamError(
+                    'O nome de usuário inserido ja está em uso.'));
               }
+              return Promise.resolve();
             });
-        })
-        .withMessage('O nome de usuário inserido ja está em uso.'),
+        }),
       body('password')
         .exists()
         .withMessage('É necessário preencher o campo "senha".')
@@ -52,16 +56,15 @@ const getValidations = (method) => {
           'Sua senha deve conter pelo menos 8 caracteres, ' +
             'com pelo menos um número, uma letra maiúscula e um caractér ' +
             'especial',
-        ),
-        // Apenas brincando com as possibilidades do express validator
-        /*
+        )
         .custom((value, {req}) => {
-          if (value !== req.body.passwordConfirmation) {
-            return false;
+          if (value != req.body.passwordConfirmation) {
+            return Promise.reject(
+              new InvalidParamError(
+                'Senha e confirmação de senha não coincidem.'));
           }
-        })
-        .withMessage('Senha e confirmação de senha não coincidem.'),
-        */
+          return Promise.resolve();
+        }),
       body('name')
         .exists()
         .withMessage('É necessário preencher o campo "nome".')
@@ -90,6 +93,41 @@ const getValidations = (method) => {
         .withMessage('Por favor insira uma senha')
         .notEmpty()
         .withMessage('Por favor insira uma senha'),
+    ];
+  }
+  case 'changePassword': {
+    return [
+      body('oldPassword')
+        .exists()
+        .withMessage('Por favor, insira sua antiga senha')
+        .custom(async (value, {req}) => {
+          const userID = req.user.id;
+          const user = User.findByPk(userID);
+          const oldPassword = user.password;
+          const passwordMatch = await bcrypt.compare(value, oldPassword);
+          if (!passwordMatch) {
+            return Promise.reject(
+              new InvalidParamError('Insira sua senha antiga corretamente'));
+          };
+          return Promise.resolve();
+        }),
+      body('newPassword')
+        .exists()
+        .withMessage('É necessário preencher o campo "senha".')
+        .isStrongPassword()
+        .withMessage(
+          'Sua senha deve conter pelo menos 8 caracteres, ' +
+            'com pelo menos um número, uma letra maiúscula e um caractér ' +
+            'especial',
+        )
+        .custom((value, {req}) => {
+          if (value !== req.body.passwordConfirmation) {
+            return Promise.reject(
+              new InvalidParamError(
+                'Senha e confirmação de senha não coincidem.'));
+          }
+          return Promise.resolve();
+        }),
     ];
   }
   case 'teste': {

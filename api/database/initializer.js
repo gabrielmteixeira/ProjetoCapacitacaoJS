@@ -1,7 +1,7 @@
+const CustomerMusic = require('../entities/users/models/CustomerMusics');
 const User = require('../entities/users/models/Users');
 const Album = require('../entities/albums/models/Albums');
 const Music = require('../entities/musics/models/Musics');
-const CustomerMusic = require('../entities/users/models/CustomerMusics');
 
 // The purpose of this file is to initialize the tables relations and sync them
 // with the DB

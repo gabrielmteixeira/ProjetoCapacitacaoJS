@@ -30,8 +30,8 @@ router.post(
     'musicGenre',
     'birthday',
   ]),
-  userValidate('registerUser'),
   notLoggedIn(),
+  userValidate('registerUser'),
   async (req, res, next) => {
     try {
       const user = req.body;

@@ -1,9 +1,4 @@
-const EmptyDatabaseError = require('../../../errors/EmptyDatabaseError');
-const InvalidParamError = require('../../../errors/InvalidParamError');
-const bcrypt = require('bcrypt');
-const {unlink} = require('fs').promises;
 const {Music, Album, CustomerMusic} = require('../../../database/initializer');
-const path = require('path');
 
 class CustomerMusicService {
   async getMusics(userId) {
