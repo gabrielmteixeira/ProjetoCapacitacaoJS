@@ -27,6 +27,7 @@ import {
   CardFooter,
   CardTitle,
   Container,
+  FormText,
   FormGroup,
   Form,
   Input,
@@ -42,23 +43,20 @@ class User extends React.Component {
           <Container className="themed-container">
             <Card className="card-user">
               <CardHeader>
-                <CardTitle tag="h5">Edit Profile</CardTitle>
+                <CardTitle tag="h5">Login</CardTitle>
               </CardHeader>
               <CardBody>
                 <Form>
                   <Row>
-                    <Col className="pr-1" md="5">
+                    <Col className="pr-1" md="6">
                       <FormGroup>
-                        <label>Company (disabled)</label>
-                        <Input
-                          defaultValue="Creative Code Inc."
-                          disabled
-                          placeholder="Company"
-                          type="text"
-                        />
+                        <label htmlFor="exampleInputEmail1">
+                          Email
+                        </label>
+                        <Input placeholder="Email" type="email" />
                       </FormGroup>
                     </Col>
-                    <Col className="px-1" md="3">
+                    <Col className="pl-1" md="6">
                       <FormGroup>
                         <label>Username</label>
                         <Input
@@ -68,19 +66,35 @@ class User extends React.Component {
                         />
                       </FormGroup>
                     </Col>
-                    <Col className="pl-1" md="4">
+                  </Row>
+                  <Row>
+                    <Col className="pr-1" md="6">
                       <FormGroup>
-                        <label htmlFor="exampleInputEmail1">
-                          Email address
+                        <label htmlFor="Senha">
+                          Senha:
                         </label>
-                        <Input placeholder="Email" type="email" />
+                        <Input
+                          name="password" 
+                          placeholder="Senha" 
+                          type="password" 
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col className="pl-1" md="6">
+                      <FormGroup>
+                        <label>Confirme sua senha:</label>
+                        <Input
+                          name="passwordConfirm"
+                          placeholder="Confirme sua senha"
+                          type="password"
+                        />
                       </FormGroup>
                     </Col>
                   </Row>
                   <Row>
                     <Col className="pr-1" md="6">
                       <FormGroup>
-                        <label>First Name</label>
+                        <label>Nome</label>
                         <Input
                           defaultValue="Chet"
                           placeholder="Company"
@@ -88,65 +102,38 @@ class User extends React.Component {
                         />
                       </FormGroup>
                     </Col>
-                    <Col className="pl-1" md="6">
+                    <Col className="px-1" md="3">
                       <FormGroup>
-                        <label>Last Name</label>
-                        <Input
-                          defaultValue="Faker"
-                          placeholder="Last Name"
-                          type="text"
-                        />
+                        <label for="Estilo Musical Preferido">Data de Nascimento:</label>
+                        <Input type="date" name="dataNascimento" id="dataNascimento" />
+                      </FormGroup>
+                    </Col>
+                    <Col className="pl-1" md="3">
+                      <FormGroup>
+                        <label for="exampleSelect">Estilo Musical Preferido:</label>
+                        <Input type="select" name="select" id="exampleSelect">
+                          <option value="Rock">Rock</option>
+                          <option value="Pop">Pop</option>
+                          <option value="Hip-Hop">Hip-Hop</option>
+                          <option value="Rap">Rap</option>
+                          <option value="Eletronica">Eletronica</option>
+                          <option value="Sertanejo">Sertanejo</option>
+                          <option value="Funk">Funk</option>
+                          <option value="Indie">Indie</option>
+                          <option value="Rap">Rap</option>
+                          <option value="Others">Outros</option>
+                        </Input>
                       </FormGroup>
                     </Col>
                   </Row>
                   <Row>
-                    <Col md="12">
+                    <Col md="6" className="mr-auto ml-auto">
                       <FormGroup>
-                        <label>Address</label>
-                        <Input
-                          defaultValue="Melbourne, Australia"
-                          placeholder="Home Address"
-                          type="text"
-                        />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col className="pr-1" md="4">
-                      <FormGroup>
-                        <label>City</label>
-                        <Input
-                          defaultValue="Melbourne"
-                          placeholder="City"
-                          type="text"
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col className="px-1" md="4">
-                      <FormGroup>
-                        <label>Country</label>
-                        <Input
-                          defaultValue="Australia"
-                          placeholder="Country"
-                          type="text"
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col className="pl-1" md="4">
-                      <FormGroup>
-                        <label>Postal Code</label>
-                        <Input placeholder="ZIP Code" type="number" />
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col md="12">
-                      <FormGroup>
-                        <label>About Me</label>
-                        <Input
-                          type="textarea"
-                          defaultValue="Oh so, your weak rhyme You doubt I'll bother, reading into it"
-                        />
+                        <label for="file">Foto do usuário</label>
+                        <Input type="file" name="foto" id="foto" />
+                        <FormText color="muted">
+                          Clique no botão e selecione a foto se desejar
+                        </FormText>
                       </FormGroup>
                     </Col>
                   </Row>
