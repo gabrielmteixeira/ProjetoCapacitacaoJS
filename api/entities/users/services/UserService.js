@@ -32,7 +32,7 @@ class UserService {
   }
 
   async alterUser(id, body) {
-    const user = User.findByPk(id);
+    const user = await User.findByPk(id);
     if (!user) {
       throw new InvalidParamError(`Não há usuário com o ID ${id}!`);
     }

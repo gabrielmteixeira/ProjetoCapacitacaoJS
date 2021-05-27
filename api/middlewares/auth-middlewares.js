@@ -3,6 +3,8 @@ const passport = require('passport');
 const {unlink} = require('fs').promises;
 const jwt = require('jsonwebtoken');
 const path = require('path');
+const MusicService = require('../entities/musics/services/MusicService');
+const AlbumService = require('../entities/albums/services/AlbumService');
 
 function loginMiddleware(req, res, next) {
   passport.authenticate(
@@ -110,9 +112,43 @@ function checkRole(roleArr) {
   };
 }
 
+function checkDataBelongsToUser(entity) {
+  return async function(req, res, next) {
+    try {
+      if (entity == 'user') {
+        if (!(req.user.id === req.params.id)) {
+          throw new NotAuthorizedError(
+            'Você não pode acessar dados de outros usuários por essa rota!',
+          );
+        }
+      } else if (entity == 'music') {
+        music = await MusicService.getMusicById(req.params.id);
+        musicAuthorId = music.authorId;
+        if (!(req.user.id == musicAuthorId)) {
+          throw new NotAuthorizedError(
+            'Você deve ser o proprietário de uma música para alterá-la!',
+          );
+        }
+      } else if (entity == 'album') {
+        album = await AlbumService.getAlbumById(req.params.id);
+        albumAuthorId = album.authorId;
+        if (!(req.user.id == albumAuthorId)) {
+          throw new NotAuthorizedError(
+            'Você deve ser o proprietário de um álbum para alterá-lo!',
+          );
+        }
+      }
+      next();
+    } catch (error) {
+      next(error);
+    };
+  };
+}
+
 module.exports = {
   loginMiddleware,
   jwtMiddleware,
   checkRole,
   notLoggedIn,
+  checkDataBelongsToUser,
 };

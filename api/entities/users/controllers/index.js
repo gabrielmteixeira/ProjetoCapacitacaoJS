@@ -7,6 +7,7 @@ const {
   jwtMiddleware,
   checkRole,
   notLoggedIn,
+  checkDataBelongsToUser,
 } = require('../../../middlewares/auth-middlewares');
 const {upload} = require('../../../middlewares/multer');
 const {userValidate} = require('../../../middlewares/user-validator');
@@ -91,6 +92,7 @@ router.get('/', jwtMiddleware, async (req, res, next) => {
 router.patch(
   '/:id',
   jwtMiddleware,
+  checkDataBelongsToUser('user'),
   upload('updateUser', 'user'),
   requestFilter('body', [
     'email',

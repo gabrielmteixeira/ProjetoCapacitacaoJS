@@ -3,7 +3,9 @@ const UserService = require('../../users/services/UserService');
 const router = require('express').Router();
 const {
   jwtMiddleware,
-  checkRole} = require('../../../middlewares/auth-middlewares');
+  checkRole,
+  checkDataBelongsToUser,
+} = require('../../../middlewares/auth-middlewares');
 const {upload} = require('../../../middlewares/multer');
 const CustomerMusicService = require(
   '../../users/services/CustomerMusicService');
@@ -73,6 +75,7 @@ router.get('/',
 
 router.patch('/:id',
   checkRole(['artist', 'admin']),
+  checkDataBelongsToUser('album'),
   upload('updateAlbum', 'album'),
   async (req, res, next) => {
     try {
