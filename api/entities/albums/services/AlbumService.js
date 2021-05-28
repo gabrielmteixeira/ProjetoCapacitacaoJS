@@ -1,5 +1,6 @@
 const EmptyDatabaseError = require('../../../errors/EmptyDatabaseError');
 const InvalidParamError = require('../../../errors/InvalidParamError');
+const MusicService = require('../../musics/services/MusicService');
 const {Album} = require('../../../database/initializer');
 const {unlink} = require('fs').promises;
 const path = require('path');
@@ -47,7 +48,13 @@ class AlbumService {
     if (!album) {
       throw InvalidParamError(`Não há álbum com  ID ${id}!`);
     }
-
+    const albumMusics = await album.getMusics();
+    if (albumMusics) {
+      for (const music of albumMusics) {
+        console.log(`musicId: ${music.id}\n`);
+        await MusicService.deleteMusic(music.id);
+      }
+    }
     await unlink(
       path.resolve(
         __dirname,

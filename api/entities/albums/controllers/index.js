@@ -14,7 +14,7 @@ router.use(jwtMiddleware);
 
 // Criar album vazio ou criar album com várias músicas
 router.post('/',
-  checkRole(['artist', 'admin']),
+  checkRole(['artist']),
   upload('createAlbum', 'album'),
   async (req, res, next) => {
     try {
@@ -74,7 +74,7 @@ router.get('/',
 );
 
 router.patch('/:id',
-  checkRole(['artist', 'admin']),
+  checkRole(['artist']),
   checkDataBelongsToUser('album'),
   upload('updateAlbum', 'album'),
   async (req, res, next) => {
