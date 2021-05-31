@@ -69,8 +69,7 @@ router.get('/:id/musics',
   jwtMiddleware,
   async (req, res, next) => {
     try {
-      const userId = req.params.id;
-      console.log(userId);
+      const userId = req.user.id;
       const userMusics = await CustomerMusicService.getMusics(userId);
       res.status(200).json(userMusics);
     } catch (error) {

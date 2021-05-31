@@ -16,7 +16,8 @@ class UserService {
     const users = await User.findAll();
     if (!users) {
       throw new EmptyDatabaseError(
-        'Não existem entidades na tabela requisitada');
+        'Não existem entidades na tabela requisitada',
+      );
     }
 
     return users;
@@ -45,13 +46,15 @@ class UserService {
     if (!user) {
       throw new InvalidParamError(`Não há usuário com o ID ${id}!`);
     }
-    await unlink(
-      path.resolve(
-        __dirname,
-        '../../../../paper-dashboard-react/src/assets/img/entities/users',
-        user.image,
-      ),
-    );
+    if (user.image != 'default-user-icon.png') {
+      await unlink(
+        path.resolve(
+          __dirname,
+          '../../../../paper-dashboard-react/src/assets/img/entities/users',
+          user.image,
+        ),
+      );
+    }
     await user.destroy();
   }
 }

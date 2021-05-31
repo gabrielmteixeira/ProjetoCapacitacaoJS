@@ -16,7 +16,6 @@ function loginMiddleware(req, res, next) {
         }
 
         req.login(user, {session: false}, (err) => {
-          console.log(err);
           if (err) {
             throw err;
           }

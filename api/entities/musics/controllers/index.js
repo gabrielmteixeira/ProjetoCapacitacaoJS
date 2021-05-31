@@ -24,7 +24,6 @@ router.post('/:id',
       if (musics.length > 0) {
         const album = await AlbumService.getAlbumById(albumId);
         for (music of musics) {
-          console.log(music);
           music.image = album.image;
           music.authorId = album.authorId;
           music.genre = music.genre ? music.genre : album.genre;
