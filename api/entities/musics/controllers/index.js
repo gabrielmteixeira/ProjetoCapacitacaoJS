@@ -106,14 +106,28 @@ router.patch('/:id',
 );
 
 // Delete música específica
-router.delete('/:id',
-  checkRole(['artist', 'admin']),
+router.delete(
+  '/:id',
+  checkRole(['artist']),
+  checkDataBelongsToUser('music'),
   async (req, res, next) => {
     try {
       const musicId = req.params.id;
-      const music = await MusicService.getMusicById(musicId);
       await MusicService.deleteMusic(musicId);
-      res.status(200).json(music);
+      res.status(200).json('Música deletada com sucesso!');
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+router.delete('/admin/:id',
+  checkRole(['admin']),
+  async (req, res, next) => {
+    try {
+      const musicId = req.params.id;
+      await MusicService.deleteMusic(musicId);
+      res.status(200).json('Música deletada com sucesso!');
     } catch (error) {
       next(error);
     }

@@ -92,14 +92,28 @@ router.patch('/:id',
 );
 
 // Deletar album e consequentemente todas as suas músicas
-router.delete('/:id',
+router.delete(
+  '/:id',
+  checkRole(['artist']),
+  checkDataBelongsToUser('album'),
+  async (req, res, next) => {
+    try {
+      const albumId = req.params.id;
+      await AlbumService.deleteAlbum(albumId);
+      res.status(200).json('Álbum deletado com sucesso!');
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+router.delete('/admin/:id',
   checkRole(['artist', 'admin']),
   async (req, res, next) => {
     try {
       const albumId = req.params.id;
-      const album = await AlbumService.getAlbumById(albumId);
       await AlbumService.deleteAlbum(albumId);
-      res.status(200).json(album);
+      res.status(200).json('Álbum deletado com sucesso!');
     } catch (error) {
       next(error);
     }

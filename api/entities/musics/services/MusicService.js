@@ -34,7 +34,7 @@ class MusicService {
   async deleteMusic(id) {
     const music = await Music.findByPk(id);
     if (!music) {
-      throw InvalidParamError(`Não há música com  ID ${id}!`);
+      throw new InvalidParamError(`Não há música com  ID ${id}!`);
     }
 
     await music.destroy();

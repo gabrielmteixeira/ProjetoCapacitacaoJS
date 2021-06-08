@@ -119,14 +119,28 @@ router.patch(
 );
 
 router.delete(
-  '/:id',
+  '/',
+  jwtMiddleware,
+  async (req, res, next) => {
+    try {
+      const userId = req.user.id;
+      await UserService.deleteUser(userId);
+      res.status(200).json('Seu usuário foi deletado com sucesso!');
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+router.delete(
+  '/admin/:id',
   jwtMiddleware,
   checkRole(['admin']),
   async (req, res, next) => {
     try {
       const userId = req.params.id;
       await UserService.deleteUser(userId);
-      res.sendStatus(200);
+      res.status(200).json('Usuário deletado com sucesso!');
     } catch (error) {
       next(error);
     }
