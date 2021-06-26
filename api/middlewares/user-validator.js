@@ -97,6 +97,11 @@ const getValidations = (method) => {
   }
   case 'changePassword': {
     return [
+      body('email')
+        .exists()
+        .withMessage('Por favor insira um email!')
+        .isEmail()
+        .withMessage('Por favor insira um email válido!'),
       body('oldPassword')
         .exists()
         .withMessage('Por favor, insira sua antiga senha')
@@ -130,13 +135,69 @@ const getValidations = (method) => {
         }),
     ];
   }
-  case 'teste': {
+  case 'updateUser': {
     return [
-      body('teste')
-        .exists()
-        .withMessage('Campo teste não existe')
+      body('name')
+        .optional()
+        .isAlpha('pt-BR', {ignore: ' '})
+        .withMessage('O nome deve conter apenas letras'),
+      body('username')
+        .optional()
+        .custom((value)=> {
+          return User.findOne({where: {username: value}})
+            .then((user)=> {
+              if (user) {
+                return Promise.reject(
+                  new InvalidParamError(
+                    'O nome de usuário inserido ja está em uso.'));
+              }
+              return Promise.resolve();
+            });
+        }),
+      body('email')
+        .optional()
         .isEmail()
-        .withMessage('Não é um email'),
+        .withMessage('O email inserido não é válido')
+        .custom((value)=> {
+          return User.findOne({where: {email: value}})
+            .then((user)=> {
+              if (user) {
+                return Promise.reject(
+                  new InvalidParamError('O email inserido já está em uso.'));
+              }
+              return Promise.resolve();
+            });
+        }),
+    ];
+  }
+  case 'forgotPassword': {
+    return [
+      body('email')
+        .exists()
+        .withMessage('Por favor insira um email!')
+        .isEmail()
+        .withMessage('Por favor insira um email válido!'),
+    ];
+  }
+  case 'resetPassword': {
+    return [
+      body('password')
+        .exists()
+        .withMessage('É necessário preencher o campo "nova senha".')
+        .isStrongPassword()
+        .withMessage(
+          'Sua senha deve conter pelo menos 8 caracteres, ' +
+            'com pelo menos um número, uma letra maiúscula e um caractér ' +
+            'especial',
+        )
+        .custom((value, {req}) => {
+          if (value != req.body.passwordConfirmation) {
+            return Promise.reject(
+              new InvalidParamError(
+                'Senha e confirmação de senha não coincidem.'));
+          }
+          return Promise.resolve();
+        }),
     ];
   }
   }

@@ -17,6 +17,7 @@ router.use(jwtMiddleware);
 // params
 router.post('/:id',
   checkRole(['artist']),
+  checkDataBelongsToUser('album'),
   async (req, res, next) => {
     try {
       const albumId = req.params.id;
@@ -48,6 +49,7 @@ router.post('/store/:id',
     try {
       const userId = req.user.id;
       const musicId = req.params.id;
+      // Pagamento
       CustomerMusicService.buyMusic(userId, musicId);
       res.status(200).json('Compra realizada!');
     } catch (error) {

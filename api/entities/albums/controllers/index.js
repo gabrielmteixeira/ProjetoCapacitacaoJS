@@ -12,7 +12,7 @@ const CustomerMusicService = require(
 
 router.use(jwtMiddleware);
 
-// Criar album vazio ou criar album com várias músicas
+// Criar album vazio
 router.post('/',
   checkRole(['artist']),
   upload('createAlbum', 'album'),
@@ -26,7 +26,14 @@ router.post('/',
       const createdAlbum = await AlbumService.createAlbum(newAlbum);
       const author = await UserService.getUser(authorId);
       createdAlbum.setAuthor(author);
-      res.status(201).json(createdAlbum);
+      resObject = {
+        addMusic_URL: {
+          method: 'POST',
+          href: `localhost:3000/musics/${createdAlbum.id}`,
+        },
+        album: createdAlbum,
+      };
+      res.status(201).json(resObject);
     } catch (error) {
       next(error);
     }
@@ -39,6 +46,7 @@ router.post('/store/:id',
     try {
       const userId = req.user.id;
       const albumId = req.params.id;
+      // Pagamento
       CustomerMusicService.buyAlbum(userId, albumId);
       res.status(200).json('Compra realizada!');
     } catch (error) {

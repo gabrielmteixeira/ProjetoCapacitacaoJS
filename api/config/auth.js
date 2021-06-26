@@ -4,6 +4,9 @@ const LocalStrategy = require('passport-local').Strategy;
 const JWTStrategy = require('passport-jwt').Strategy;
 const {User} = require('../database/initializer');
 const bcrypt = require('bcrypt');
+const blacklist = require('../redis/blacklist');
+const {JsonWebTokenError} = require('jsonwebtoken');
+
 
 passport.use(
   'login',
@@ -45,10 +48,15 @@ passport.use(
     {
       secretOrKey: process.env.SECRET_KEY,
       jwtFromRequest: cookieExtractor,
+      passReqToCallback: true,
     },
-    // TODO: Implementar blacklist (logout)
-    (jwtPayload, done) => {
+    async (req, jwtPayload, done) => {
       try {
+        const blacklistHasToken = await blacklist.hasToken(req.cookies['jwt']);
+        if (blacklistHasToken) {
+          throw new JsonWebTokenError('Token inválido por logout!');
+        }
+
         return done(null, jwtPayload.user);
       } catch (error) {
         return done(error, false);
